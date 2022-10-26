@@ -1,8 +1,8 @@
 #include "word2vec.cpp"
 
 int main(int argc, char const *argv[]){
-    Word2Vec word2Vec("test");
-    word2Vec.debugMode = 2;
+    Word2Vec word2Vec("test/test.txt");
+    word2Vec.debugMode = 0;
     word2Vec.numThreads = 2;
     word2Vec.iterTimes = 10;
     if (argc % 2 == 0) {
