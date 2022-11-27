@@ -1,6 +1,9 @@
 #include <iostream>
 #include <thread>
 #include <dirent.h>
+#include <fstream>
+#include <sstream>
+#include "json.hpp"
 //#include "word2vec.c"
 
 using namespace std;
@@ -14,8 +17,15 @@ void _temp_print(string _s, int _i1 = -1, int _i2 = -1){
     cout << "\33[2K\r";
 }
 
-void read_dataset(){
-    for (size_t i = 0; i < 1<<20; i++);
+void read_dataset(string dir){
+    cout << dir << endl;
+    ifstream dataset_file(dir);
+    stringstream buffer;
+    buffer << dataset_file.rdbuf();
+    auto json = nlohmann::json::parse(buffer);
+    for (auto text : json){
+        cout << text["title"] << endl;
+    }
 }
 
 int main(int argc, char const *argv[]){
@@ -36,12 +46,12 @@ int main(int argc, char const *argv[]){
         int _cont = 0;
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
-            if(_cout)_temp_print("\n", _cont, num_files);
             _cont++;
-            read_dataset();
+            read_dataset(path + + f->d_name);
         }
         closedir(dir);
     }
+
     cout <<"Total de archivos "<< num_files << endl;
     return 0;
 }
