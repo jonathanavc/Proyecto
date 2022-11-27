@@ -9,26 +9,32 @@
 
 using namespace std;
 
-bool _cout = 1;
+bool _cout = 0;
 
 void _temp_print(string _s, int _i1 = -1, int _i2 = -1){
     cout << "\33[2K\r";
     if( _i1!= -1) cout <<"["<< _i1 <<"/"<<_i2<<"]";
     cout << _s;
     cout << "\e[A";
-    
-    
 }
 
 void read_dataset(string dir){
-    //cout << dir << endl;
     ifstream dataset_file(dir);
     stringstream buffer;
     buffer << dataset_file.rdbuf();
-    auto json = nlohmann::json::parse(buffer);
-    for (auto text : json){
-        cout << text["text"] << endl;
+    auto json_file = nlohmann::json::parse(buffer);
+    for (auto text : json_file){
+        string _text = text["text"];
+        std::stringstream words(_text);
+        string word;
+        while (words >> word) {
+            //filtrar palabra???
+            //vectorizar palabra
+            cout << word <<" ";
+            //agregar al resumen
+        }
     }
+    //agregar resumen al cluster
 }
 
 int main(int argc, char const *argv[]){
