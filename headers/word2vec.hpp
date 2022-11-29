@@ -36,11 +36,11 @@ word2vec::word2vec(std::string file_name){
             if ((a < max_w) && (word[a] != '\n')) a++;
         }
         word[a] = 0;
-        for (a = 0; a < size; a++) fread(&M[a + b * size], sizeof(float), 1, f);
+        for (a = 0; a < size; a++) fread(&M[a +], sizeof(float), 1, f);
         len = 0;
-        for (a = 0; a < size; a++) len += M[a + b * size] * M[a + b * size];
+        for (a = 0; a < size; a++) len += M[a] * M[a];
         len = sqrt(len);
-        for (a = 0; a < size; a++) M[a + b * size] /= len;
+        for (a = 0; a < size; a++) M[a] /= len;
         w2v[(std::string)word] = M;
     }
     fclose(f);
