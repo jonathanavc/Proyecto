@@ -3,9 +3,9 @@
 #include <dirent.h>
 #include <fstream>
 #include <sstream>
-#include "json.hpp"
-#include "bfr.hpp"
-//#include "word2vec.c"
+#include "headers/json.hpp"
+#include "headers/bfr.hpp"
+#include "headers/word2vec.hpp"
 
 using namespace std;
 
