@@ -9,7 +9,10 @@
 
 using namespace std;
 
+string word2vec_file = "GoogleNews-vectors-negative300.bin";
+word2vec * w2v;
 bool _cout = 0;
+
 
 void _temp_print(string _s, int _i1 = -1, int _i2 = -1){
     cout << "\33[2K\r";
@@ -28,9 +31,13 @@ void read_dataset(string dir){
         std::stringstream words(_text);
         string word;
         while (words >> word) {
-            //filtrar palabra???
-            //vectorizar palabra
-            cout << word <<" ";
+            cout << word <<": ";
+            vector<float> * M = w2v->getvec(word);
+            if(M == NULL) continue;
+            for (size_t i = 0; i < M->size(); i++){
+                cout << M->at(i) <<" ";
+            }
+            cout << endl;
             //agregar al resumen
         }
     }
@@ -47,7 +54,6 @@ int main(int argc, char const *argv[]){
     if(n_threads < 0) n_threads = 1;
     thread threads[n_threads];
 
-
     int num_files = 0;
     if (auto dir = opendir(path.c_str())) {
         while (auto f = readdir(dir)){
@@ -56,7 +62,10 @@ int main(int argc, char const *argv[]){
         }
         closedir(dir);
     }
+
     if (auto dir = opendir(path.c_str())) {
+        if(_cout) _temp_print("cargando word2vec...");
+        w2v = new word2vec(word2vec_file);
         int _cont = 0;
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
