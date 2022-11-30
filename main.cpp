@@ -6,6 +6,7 @@
 #include "headers/json.hpp"
 #include "headers/bfr.hpp"
 #include "headers/word2vec.hpp"
+#include "headers/preprocesado.hpp"
 
 using namespace std;
 
@@ -27,9 +28,14 @@ void read_dataset(string dir){
     buffer << dataset_file.rdbuf();
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
+        preprocesado * _pp = new preprocesado();
         string _text = text["text"];
         std::stringstream words(_text);
         string word;
+        cout << _text << endl;
+        _pp->preprocess_str(_text);
+        //cout << _pp->preprocess_str(_text)<< endl;
+        /*
         while (words >> word) {
             cout << word <<": ";
             vector<float> * M = w2v->getvec(word);
@@ -40,6 +46,7 @@ void read_dataset(string dir){
             cout << endl;
             //agregar al resumen
         }
+        */
     }
     //agregar resumen al cluster
 }
@@ -65,7 +72,7 @@ int main(int argc, char const *argv[]){
 
     if (auto dir = opendir(path.c_str())) {
         if(_cout) _temp_print("cargando word2vec...");
-        w2v = new word2vec(word2vec_file);
+        //w2v = new word2vec(word2vec_file);
         int _cont = 0;
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
