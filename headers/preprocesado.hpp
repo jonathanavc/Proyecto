@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <regex>
 #include <unordered_set>
@@ -8,11 +9,11 @@ using namespace std;
 
 // 1. lowercase 2. puntuacion 3. stopwords 4. stemming
 
-class prepocesado {
+class preprocesado {
     private:
         unordered_set<string> stopwords;
     public:
-        prepocesado(){
+        preprocesado(){
           unordered_set<string> wd{
             "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself",
             "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it",
@@ -30,14 +31,22 @@ class prepocesado {
           };
           stopwords = wd;
         }
-        ~prepocesado();
+        ~preprocesado(){
+        }
 
         string preprocess_str(string text){
-          transform(text.begin(), text.end(), text.begin(), ::tolower());
-          regex_replace(text, ".|,|:|;|'|\"|", "");
-          for(int i = 0; i < text.size(); i++)
-            if(stopwords.count(text[i])) 
-              text[i] = "";
+          transform(text.begin(), text.end(), text.begin(), [](unsigned char c){ return std::tolower(c); });
+          regex e(".|,|:|;|'|");
+          regex_replace(text, e, "");
+          string new_text;
+          istringstream iss(text);
+          do{
+            string word;
+            iss >> word;
+            if(!stopwords.count(word)) 
+              new_text = new_text + word;
+          }while(iss);
+          regex_replace(text, e, "");
           stemming::english_stem<> StemEnglish;
           StemEnglish(text);
           return text;
