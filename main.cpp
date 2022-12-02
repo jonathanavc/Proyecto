@@ -33,15 +33,17 @@ void read_dataset(string dir){
         _text = _pp->preprocess_str(_text);
         std::stringstream words(_text);
         string word;
-        vector<float> * M;
+        float * M;
         while (words >> word) {
             cout << word <<": ";
             M = w2v->getvec(word);
             if(M == NULL) {
-                cout <<"_"<< endl;
+                for (size_t i = 0; i < 5; i++){
+                    cout << M[i] << " ";
+                }
                 continue;
             }
-            cout <<"*"<< endl;
+            cout << "\n";
             //agregar al resumen
         }
     }
