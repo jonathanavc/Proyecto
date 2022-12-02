@@ -14,7 +14,7 @@ void temp_print(std::string _s, int _i1 = -1, int _i2 = -1, mytime * _mytime = N
         double tnecrep = 100.0 - percent;
         size_t dif = _mytime->getdif();
         double seconds = ((tnecrep * dif)/percent)/1000.0;
-        if(seconds > 3600) std::cout << std::fixed << std::setprecision(2) << seconds/3600 <<"m";
+        if(seconds > 3600) std::cout << std::fixed << std::setprecision(2) << seconds/3600 <<"h";
         else if(seconds > 60) std::cout << std::fixed << std::setprecision(2) << seconds/60 <<"m";
         else std::cout << std::fixed << std::setprecision(2) << seconds <<"s";
         
