@@ -47,7 +47,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
         }
         c[a] = 0;
         for (a = 0; a < size; a++) fread(&M[size * cont + a], sizeof(float), 1, f);
-        std::transform(sword.begin(), sword.end(), sword.begin(), [](unsigned char c){ return std::toupper(c); });
+        std::transform(sword.begin(), sword.end(), sword.begin(), [](unsigned char c){ return std::tolower(c); });
         w2v.insert({c, cont});
         cont++;
     }
