@@ -37,7 +37,7 @@ void read_dataset(string dir){
         while (words >> word) {
             cout << word <<": ";
             M = w2v->getvec(word);
-            if(M == NULL) {
+            if(M != NULL) {
                 for (size_t i = 0; i < 5; i++){
                     cout << M[i] << " ";
                 }
