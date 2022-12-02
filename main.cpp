@@ -68,7 +68,7 @@ int main(int argc, char const *argv[]){
         closedir(dir);
     }
     if (auto dir = opendir(path.c_str())) {
-        if(_cout) temp_print("cargando word2vec...\n");
+        if(_cout) temp_print("cargando word2vec...");
         w2v = new word2vec(word2vec_file);
         w2v_dim = w2v->getdim();
         int _cont = 0;
@@ -77,7 +77,7 @@ int main(int argc, char const *argv[]){
             if(threads[_cont % n_threads].joinable()) threads[_cont % n_threads].join();
             threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
             _cont++;
-            if(_cout)temp_print("Leyendo dataset\n",_cont, num_files);
+            if(_cout)temp_print("Leyendo dataset",_cont, num_files);
         }
         closedir(dir);
     }

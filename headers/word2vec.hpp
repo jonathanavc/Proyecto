@@ -12,7 +12,7 @@ private:
     float * M;
     bool _cout;
 public:
-    word2vec(std::string file_name, bool __cout = 1);
+    word2vec(std::string file_name, bool __cout);
     ~word2vec();
     float * getvec(std::string word);
     long long getdim();
@@ -32,7 +32,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
     M = (float *) malloc(size * words * sizeof(float));
     int cont = 0;
     for (b = 0; b < words; b++) {
-        if(_cout && cont%10000 == 0)temp_print("Cargando w2v...\n",cont, words);
+        if(_cout && cont%10000 == 0)temp_print("Cargando w2v...",cont, words);
         std::string sword;
         a = 0;
         while (1) {
