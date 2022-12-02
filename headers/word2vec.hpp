@@ -10,15 +10,17 @@ private:
     std::map<std::string, int > w2v;
     long long words, size;
     float * M;
+    bool _cout;
 public:
-    word2vec(std::string file_name);
+    word2vec(std::string file_name, bool __cout = 1);
     ~word2vec();
     float * getvec(std::string word);
     long long getdim();
 };
 
-word2vec::word2vec(std::string file_name){
+word2vec::word2vec(std::string file_name, bool __cout = 1){
     FILE * f = fopen(file_name.c_str(), "rb");
+    _cout = __cout;
     if (f == NULL) {
         printf("Input file not found\n");
         return;
@@ -30,7 +32,7 @@ word2vec::word2vec(std::string file_name){
     M = (float *) malloc(size * words * sizeof(float));
     int cont = 0;
     for (b = 0; b < words; b++) {
-        if(cont%10000 == 0)temp_print("Cargando w2v...\n",cont, words);
+        if(_cout && cont%10000 == 0)temp_print("Cargando w2v...\n",cont, words);
         std::string sword;
         a = 0;
         while (1) {
