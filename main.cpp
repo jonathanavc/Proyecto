@@ -72,12 +72,16 @@ int main(int argc, char const *argv[]){
         w2v = new word2vec(word2vec_file);
         w2v_dim = w2v->getdim();
         int _cont = 0;
+        int _cont_fin = 0;
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
-            if(threads[_cont % n_threads].joinable()) threads[_cont % n_threads].join();
+            if(threads[_cont % n_threads].joinable()){
+                _cont_fin++;
+                threads[_cont % n_threads].join();
+                if(_cout)temp_print("Leyendo dataset",_cont, num_files);
+            }
             threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
             _cont++;
-            if(_cout)temp_print("Leyendo dataset",_cont, num_files);
         }
         closedir(dir);
     }
