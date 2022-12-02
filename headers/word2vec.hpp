@@ -34,6 +34,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
     M = (float *) malloc(size * words * sizeof(float));
     int cont = 0;
     _mytime.start("");
+    if(_cout) temp_print("cargando word2vec...");
     for (b = 0; b < words; b++) {
         if(_cout && cont%10000 == 0)temp_print("Cargando w2v... tiempo restante:",cont, words, &_mytime);
         std::string sword;

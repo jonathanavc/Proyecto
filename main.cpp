@@ -8,7 +8,6 @@
 #include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
-
 using namespace std;
 
 string word2vec_file = "GoogleNews-vectors-negative300.bin";
@@ -68,8 +67,7 @@ int main(int argc, char const *argv[]){
     }
 
     if (auto dir = opendir(path.c_str())) {
-        if(_cout) temp_print("cargando word2vec...");
-        w2v = new word2vec(word2vec_file);
+        w2v = new word2vec(word2vec_file, _cout);
         w2v_dim = w2v->getdim();
         int _cont = 0;
         int _cont_fin = 0;
