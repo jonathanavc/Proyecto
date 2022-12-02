@@ -11,7 +11,7 @@
 using namespace std;
 
 string word2vec_file = "GoogleNews-vectors-negative300.bin";
-int w2v_dim = 100;
+int w2v_dim = 0;
 word2vec * w2v;
 bool _cout = 0;
 
@@ -34,18 +34,23 @@ void read_dataset(string dir){
         std::stringstream words(_text);
         string word;
         float * M;
+        //valores en 0
+        float resumen[w2v_dim]{};
+        int word_count = 0;
         while (words >> word) {
-            cout << word <<": ";
             M = w2v->getvec(word);
-            if(M != NULL) {
-                for (size_t i = 0; i < 5; i++){
-                    cout << M[i] << " ";
-                }
-                continue;
-            }
-            cout << "\n";
             //agregar al resumen
+            if(M != NULL) {
+                for (size_t i = 0; i < w2v_dim; i++){
+                    resumen[i] += M[i];
+                    word_count++;
+                }
+            }
         }
+        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= word_count;
+        cout << text["title"] <<":";
+        for (size_t i = 0; i < w2v_dim; i++) cout << resumen[i]<<"";
+        cout << "\n";
     }
     //agregar resumen al cluster
 }
@@ -72,6 +77,7 @@ int main(int argc, char const *argv[]){
     if (auto dir = opendir(path.c_str())) {
         if(_cout) _temp_print("cargando word2vec...");
         w2v = new word2vec(word2vec_file);
+        w2v_dim = w2v->getdim();
         int _cont = 0;
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;

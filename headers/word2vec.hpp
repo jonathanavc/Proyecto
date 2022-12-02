@@ -14,6 +14,7 @@ public:
     word2vec(std::string file_name);
     ~word2vec();
     float * getvec(std::string word);
+    long long getdim();
 };
 
 word2vec::word2vec(std::string file_name){
@@ -54,4 +55,8 @@ float * word2vec::getvec(std::string word){
     word.pop_back();
     if(w2v.find(word) == w2v.end()) return NULL;
     return M+(size*w2v[word]);
+}
+
+long long word2vec::getdim(){
+    return size;
 }
