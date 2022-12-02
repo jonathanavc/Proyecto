@@ -42,7 +42,6 @@ void read_dataset(string dir){
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= word_count;
     }
-   
 }
 
 int main(int argc, char const *argv[]){
