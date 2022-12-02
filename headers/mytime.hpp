@@ -15,6 +15,9 @@ class mytime {
   void end() {
     std::cout << _s << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - _start).count() << " ms" << std::endl;
   }
+  /**
+   * @return Tiempo que ha pasado desde start() en ms's.
+   */
   size_t getdif(){
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - _start).count();
   }
