@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <math.h>
+#include "tempprint.hpp"
 
 const long long max_w = 50;  
 
@@ -30,6 +30,7 @@ word2vec::word2vec(std::string file_name){
     M = (float *) malloc(size * words * sizeof(float));
     int cont = 0;
     for (b = 0; b < words; b++) {
+        if(cont%10000 == 0)temp_print("Cargando w2v...\n",cont, words);
         std::string sword;
         a = 0;
         while (1) {

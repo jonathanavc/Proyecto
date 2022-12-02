@@ -13,14 +13,7 @@ using namespace std;
 string word2vec_file = "GoogleNews-vectors-negative300.bin";
 int w2v_dim = 0;
 word2vec * w2v;
-bool _cout = 0;
-
-void _temp_print(string _s, int _i1 = -1, int _i2 = -1){
-    cout << "\33[2K\r";
-    if( _i1!= -1) cout <<"["<< _i1 <<"/"<<_i2<<"]";
-    cout << _s;
-    cout << "\e[A";
-}
+bool _cout = 1;
 
 void read_dataset(string dir){
     ifstream dataset_file(dir);
@@ -48,11 +41,12 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= word_count;
-        cout << text["title"] <<":";
-        for (size_t i = 0; i < w2v_dim; i++) cout << resumen[i]<<"";
-        cout << "\n";
+        //cout << text["title"] <<":";
+        //for (size_t i = 0; i < w2v_dim; i++) cout << resumen[i]<<"";
+        //cout << "\n";
+        //<--------------------------------aquí agregar resumen al cluster
     }
-    //agregar resumen al cluster
+   
 }
 
 int main(int argc, char const *argv[]){
@@ -73,9 +67,8 @@ int main(int argc, char const *argv[]){
         }
         closedir(dir);
     }
-
     if (auto dir = opendir(path.c_str())) {
-        if(_cout) _temp_print("cargando word2vec...");
+        if(_cout) temp_print("cargando word2vec...\n");
         w2v = new word2vec(word2vec_file);
         w2v_dim = w2v->getdim();
         int _cont = 0;
@@ -84,7 +77,7 @@ int main(int argc, char const *argv[]){
             if(threads[_cont % n_threads].joinable()) threads[_cont % n_threads].join();
             threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
             _cont++;
-            if(_cout)_temp_print("Leyendo dataset\n",_cont, num_files);
+            if(_cout)temp_print("Leyendo dataset\n",_cont, num_files);
         }
         closedir(dir);
     }
