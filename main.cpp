@@ -29,18 +29,18 @@ void read_dataset(string dir){
         float * M;
         //valores en 0
         float resumen[w2v_dim]{};
-        int word_count = 0;
+        int words_count = 0;
         while (words >> word) {
             M = w2v->getvec(word);
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
                     resumen[i] += M[i];
-                    word_count++;
+                    words_count++;
                 }
             }
         }
-        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= word_count;
+        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
     }
 }
 
