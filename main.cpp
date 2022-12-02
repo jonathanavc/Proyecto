@@ -11,9 +11,9 @@
 using namespace std;
 
 string word2vec_file = "GoogleNews-vectors-negative300.bin";
+int w2v_dim = 100;
 word2vec * w2v;
 bool _cout = 0;
-
 
 void _temp_print(string _s, int _i1 = -1, int _i2 = -1){
     cout << "\33[2K\r";
@@ -30,23 +30,20 @@ void read_dataset(string dir){
     for (auto text : json_file){
         preprocesado * _pp = new preprocesado();
         string _text = text["text"];
+        _text = _pp->preprocess_str(_text);
         std::stringstream words(_text);
         string word;
-        cout << _text << endl;
-        _pp->preprocess_str(_text);
-        //cout << _pp->preprocess_str(_text)<< endl;
-        /*
+        vector<float> * M;
         while (words >> word) {
             cout << word <<": ";
-            vector<float> * M = w2v->getvec(word);
-            if(M == NULL) continue;
-            for (size_t i = 0; i < M->size(); i++){
-                cout << M->at(i) <<" ";
+            M = w2v->getvec(word);
+            if(M == NULL) {
+                cout <<"_"<< endl;
+                continue;
             }
-            cout << endl;
+            cout <<"*"<< endl;
             //agregar al resumen
         }
-        */
     }
     //agregar resumen al cluster
 }
@@ -72,7 +69,7 @@ int main(int argc, char const *argv[]){
 
     if (auto dir = opendir(path.c_str())) {
         if(_cout) _temp_print("cargando word2vec...");
-        //w2v = new word2vec(word2vec_file);
+        w2v = new word2vec(word2vec_file);
         int _cont = 0;
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;

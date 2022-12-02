@@ -1,5 +1,7 @@
 #include <iostream>
+#include <stdlib.h>
 #include <sstream>
+#include <cstdlib>
 #include <string>
 #include <regex>
 #include <unordered_set>
@@ -8,6 +10,14 @@
 
 class preprocesado {
 private:
+  std::string ws2s(const std::wstring& wstr){
+    std::string str(wstr.length(), 0);
+    std::transform(wstr.begin(), wstr.end(), str.begin(), [] (wchar_t c) {
+        return (char)c;
+    });
+    return str;
+  }
+
     std::unordered_set<std::string> stopwords;
 public:
     preprocesado();
@@ -37,7 +47,7 @@ preprocesado::~preprocesado(){
 }
 
 std::string preprocesado::preprocess_str(std::string text){
-  transform(text.begin(), text.end(), text.begin(), [](unsigned char c){ return std::tolower(c); });
+  transform(text.begin(), text.end(), text.begin(), [](unsigned char c){ return std::toupper(c); });
   std::regex e(".|,|:|;|'|");
   std::regex_replace(text, e, " ");
   std::string new_text;
@@ -52,6 +62,6 @@ std::string preprocesado::preprocess_str(std::string text){
   stemming::english_stem<> StemEnglish;
   std::wstring w_new_text(new_text.begin(), new_text.end());
   StemEnglish(w_new_text);
-  std::wcout << w_new_text << std::endl;
-  return new_text;
+  //std::wcout << w_new_text << std::endl;
+  return ws2s(w_new_text);
 }
