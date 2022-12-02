@@ -8,6 +8,7 @@
 #include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
+
 using namespace std;
 
 string word2vec_file = "GoogleNews-vectors-negative300.bin";
@@ -41,10 +42,6 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= word_count;
-        //cout << text["title"] <<":";
-        //for (size_t i = 0; i < w2v_dim; i++) cout << resumen[i]<<"";
-        //cout << "\n";
-        //<--------------------------------aquí agregar resumen al cluster
     }
    
 }
@@ -54,12 +51,14 @@ int main(int argc, char const *argv[]){
         cout << "Modo de uso: "<< argv[0]<<" \"Nombre directorio\" \"N°threads\"" <<endl;
         return 1;
     }
+
     string path = argv[1];
     int n_threads = atoi(argv[2]);
     if(n_threads < 0) n_threads = 1;
     thread threads[n_threads];
-
     int num_files = 0;
+    mytime _mytime;
+
     if (auto dir = opendir(path.c_str())) {
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
@@ -67,24 +66,27 @@ int main(int argc, char const *argv[]){
         }
         closedir(dir);
     }
+
     if (auto dir = opendir(path.c_str())) {
         if(_cout) temp_print("cargando word2vec...");
         w2v = new word2vec(word2vec_file);
         w2v_dim = w2v->getdim();
         int _cont = 0;
         int _cont_fin = 0;
+        _mytime.start("");
         while (auto f = readdir(dir)){
+            if(_cout)temp_print("Leyendo dataset...");
             if (!f->d_name || f->d_name[0] == '.') continue;
             if(threads[_cont % n_threads].joinable()){
                 _cont_fin++;
                 threads[_cont % n_threads].join();
-                if(_cout)temp_print("Leyendo dataset",_cont, num_files);
+                if(_cout)temp_print("Leyendo dataset... tiempo restante: ", _cont, num_files, &_mytime);
             }
             threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
             _cont++;
         }
         closedir(dir);
     }
-    cout <<"Total de archivos "<< num_files << endl;
+
     return 0;
 }

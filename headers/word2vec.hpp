@@ -3,6 +3,7 @@
 #include <map>
 #include "tempprint.hpp"
 
+
 const long long max_w = 50;  
 
 class word2vec{
@@ -20,6 +21,7 @@ public:
 
 word2vec::word2vec(std::string file_name, bool __cout = 1){
     FILE * f = fopen(file_name.c_str(), "rb");
+    mytime _mytime;
     _cout = __cout;
     if (f == NULL) {
         printf("Input file not found\n");
@@ -31,8 +33,9 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
     char c[max_w];
     M = (float *) malloc(size * words * sizeof(float));
     int cont = 0;
+    _mytime.start("");
     for (b = 0; b < words; b++) {
-        if(_cout && cont%10000 == 0)temp_print("Cargando w2v...",cont, words);
+        if(_cout && cont%10000 == 0)temp_print("Cargando w2v... tiempo restante:",cont, words, &_mytime);
         std::string sword;
         a = 0;
         while (1) {
