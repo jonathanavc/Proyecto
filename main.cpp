@@ -71,8 +71,8 @@ int main(int argc, char const *argv[]){
         int _cont = 0;
         int _cont_fin = 0;
         _mytime.start("");
+        if(_cout)temp_print("Leyendo dataset...");
         while (auto f = readdir(dir)){
-            if(_cout)temp_print("Leyendo dataset...");
             if (!f->d_name || f->d_name[0] == '.') continue;
             if(threads[_cont % n_threads].joinable()){
                 _cont_fin++;
