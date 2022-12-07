@@ -82,6 +82,9 @@ int main(int argc, char const *argv[]){
             threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
             _cont++;
         }
+        for (int i = 0; i < n_threads;i++){
+            if(threads[i].joinable()) threads[i].join();
+        }
         closedir(dir);
     }
 
