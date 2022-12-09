@@ -67,3 +67,4 @@ float * word2vec::getvec(std::string word){
 long long word2vec::getdim(){
     return size;
 }
+

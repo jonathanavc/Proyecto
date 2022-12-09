@@ -1,9 +1,9 @@
-#include "bfr.hpp"
+#include "Kmeans.hpp"
 
 void Kmeans::setInitialPoints(vector<Point> &all_points){
   set<int> used_point_ids;
-  for(int i = 0; i < K; i++){
-    do{ int index = rand() % all_points.size();
+  for(int i = 0, index; i < K; i++){
+    do{ index = rand() % all_points.size();
     } while(used_point_ids.count(index));
     used_point_ids.insert(index);
     all_points[index].clusterID = i;
@@ -27,7 +27,7 @@ int Kmeans::getNearestClusterID(Point point) {
   return NearestClusterID;
 }
 
-Kmeans::Kmeans(int num_clusters, int max_iterations) 
+Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads) 
   : K(num_clusters), iterations(max_iterations){}  
 
 void Kmeans::run(vector<Point> &all_points) {
@@ -39,16 +39,20 @@ void Kmeans::run(vector<Point> &all_points) {
   cout << "Points with dimension = " << dimensions << endl << endl;
   cout << "Running K-Means Clustering.." << endl;
 
-  for(int iter = 1, bool done = true; (iter <= iterations) && !done; iter++, done = true){
+  int iter = 1;
+  for(bool done = true; (iter <= iterations) && !done; iter++){
     cout << "Iter - " << iter << "/" << iterations << endl;
 
     // Add all points to their nearest cluster
-    #pragma omp parallel for reduction(&&: done) num_threads(16)
+    #pragma omp parallel for reduction(&&: done) num_threads(nthreads)
     for(Point &point : all_points){
       int nearestClusterID = getNearestClusterID(point);
       if(point.clusterID == nearestClusterID) continue;
 
-      clusters[point.clusterID].points.erase(point.pointID);
+      // Cluster antiguo del punto actual se elimina
+      clusters[point.clusterID].points.erase(clusters[point.clusterID].points.begin() + point.pointID);
+
+      // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
       clusters[nearestClusterID].addPoint(point);
       done = false;
     }
@@ -58,20 +62,21 @@ void Kmeans::run(vector<Point> &all_points) {
       // ocurre en algun caso ????
       if(cluster.points.size() <= 0) continue;
       // Promedio por dimension
-      for(int i = 0, double sum = 0; i < dimensions; i++, sum = 0){
-        #pragma omp parallel for reduction(+: sum) num_threads(16)
+      for(int i = 0; i < dimensions; i++){
+        double sum = 0.0;
+        #pragma omp parallel for reduction(+: sum) num_threads(nthreads)
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
-
+    done = true;
   }
   cout << "Clustering completed in iteration : " << iter << endl << endl;
 
   for(Cluster cluster : clusters){
     cout<<"Cluster: \n"; //add centroid document
     for(Point point : cluster.points){
-      for(double component : clutser points)
+      for(double component : point.components)
         cout<<component<<" ";
       cout<<endl;
     }
@@ -83,8 +88,8 @@ void Kmeans::writeResults(string output_dir){
   ofstream pointsFile;
   pointsFile.open(output_dir + "/" + to_string(K) + "-points.txt", ios::out);
   for(Cluster cluster : clusters)
-    for(Point point : cluster)
-      pointsFile<<point.clusterID<<endl;
+    for(Point point : cluster.points)
+      pointsFile<<point.clusterID<<":"<<point.pointID<<endl;
   pointsFile.close();
 
   // Write cluster centers to file
@@ -92,10 +97,9 @@ void Kmeans::writeResults(string output_dir){
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
   if(!outfile.is_open()){ cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
-    for(double component : clutser.centroid.components)
+    for(double component : cluster.centroid.components)
       outfile<<component<<" ";
     outfile<<endl;
   }
   outfile.close();
 }
-
