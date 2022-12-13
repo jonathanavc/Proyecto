@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "headers/json.hpp"
+#include "headers/Kmeans.hpp"
 #include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
@@ -13,6 +14,7 @@ string word2vec_file = "GoogleNews-vectors-negative300.bin";
 int w2v_dim = 0;
 word2vec * w2v;
 bool _cout = 1;
+vector<Point> points;
 
 void read_dataset(string dir){
     ifstream dataset_file(dir);
@@ -21,13 +23,15 @@ void read_dataset(string dir){
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
         preprocesado * _pp = new preprocesado();
+        int _id = atoi(((string)text["id"]).c_str());
         string _text = text["text"];
         _text = _pp->preprocess_str(_text);
         std::stringstream words(_text);
         string word;
         float * M;
         //valores en 0
-        float resumen[w2v_dim]{};
+        //float resumen[w2v_dim]{};
+        vector<double> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
             M = w2v->getvec(word);
@@ -40,6 +44,8 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
+        
+        points.push_back(Point(_id, resumen));
     }
 }
 
@@ -86,6 +92,8 @@ int main(int argc, char const *argv[]){
         }
         closedir(dir);
     }
-
+    Kmeans kmeans(10, 5, n_threads);
+    kmeans.run(points);
+    kmeans.writeResults("output");
     return 0;
 }
