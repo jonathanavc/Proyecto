@@ -28,7 +28,7 @@ void read_dataset(string dir){
         int _id = atoi(((string)text["id"]).c_str());
         string _text = text["text"];
         _text = _pp.preprocess_str(_text);
-        std::stringstream words(_text);
+        std::stringstream words(text["text"]);
         string word;
         float * M;
         //valores en 0
@@ -39,13 +39,11 @@ void read_dataset(string dir){
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
-                    cout << " " << endl;
                     resumen[i] += M[i];
                     words_count++;
                 }
             }
         }
-        cout << "."<<endl;
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         cout << words_count << endl;
         for (size_t i = 0; i < 5; i++)
