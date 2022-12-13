@@ -53,8 +53,9 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
     do{ index = rand() % all_points.size();
     } while(used_point_ids.count(index));
     used_point_ids.insert(index);
-    all_points[index].clusterID = i;
+    //all_points[index].clusterID = i;
     Cluster cluster(i, all_points[index]);
+    cluster.addPoint(all_points[index]);
     clusters.push_back(cluster);
   }
 }
