@@ -89,22 +89,22 @@ void Kmeans::run(vector<Point> &all_points) {
   int iter = 1;
   for(bool done = false; (iter <= iterations) && !done; iter++){
     cout << "Iter - " << iter << "/" << iterations << endl;
-
+    done = true;
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(&&: done) num_threads(nthreads)
     for(Point &point : all_points){
       int nearestClusterID = getNearestClusterID(point);
       if(point.clusterID == nearestClusterID) continue;
-
+      cout << "1" << endl;
       // Se elimina el punto actual de su cluster antiguo
       if(point.clusterID != -1) clusters[point.clusterID].points.erase(find_if(clusters[point.clusterID].points.begin(), 
       clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;}));
-
+      cout << "2" << endl;
       // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
       clusters[nearestClusterID].addPoint(point);
       done = false;
     }
-    
+    cout << "3" << endl;
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
@@ -117,7 +117,7 @@ void Kmeans::run(vector<Point> &all_points) {
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
-    done = true;
+    cout << "4" << endl;
   }
   cout << "Clustering completed in iteration : " << iter << endl << endl;
 
