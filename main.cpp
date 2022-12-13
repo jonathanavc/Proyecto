@@ -26,7 +26,8 @@ void read_dataset(string dir){
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
-        string _text(text["text"].get<string>());
+        string _text(text["text"].get<std::string>());
+        cout << _text;
         istringstream  words(_text);
         string word;
         float * M;
