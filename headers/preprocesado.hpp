@@ -61,7 +61,7 @@ std::string preprocesado::preprocess_str(std::string text){
   stemming::english_stem<> StemEnglish;
   std::wstring w_new_text(new_text.begin(), new_text.end());
   StemEnglish(w_new_text);
-  std::wcout << w_new_text << std::endl;
+  //std::wcout << w_new_text << std::endl;
   return ws2s(w_new_text);
   //return new_text;
 }

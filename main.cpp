@@ -46,11 +46,7 @@ void read_dataset(string dir){
                 words_count++;
             }
         }
-        //for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
-        cout << _text.size() << endl;
-        cout << words_count << endl;
-        for (size_t i = 0; i < 5; i++)
-            cout << resumen[i] <<" ";
+        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         cout<<endl;
         mtx.lock();
         points.push_back(Point(_id, resumen));
