@@ -28,7 +28,7 @@ void read_dataset(string dir){
         int _id = atoi(((string)text["id"]).c_str());
         string _text = text["text"];
         _text = _pp.preprocess_str(_text);
-        std::stringstream words(text["text"]);
+        std::stringstream words((string)text["text"]);
         string word;
         float * M;
         //valores en 0
