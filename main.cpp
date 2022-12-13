@@ -46,7 +46,6 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
-        cout<<endl;
         mtx.lock();
         points.push_back(Point(_id, resumen));
         mtx.unlock();
