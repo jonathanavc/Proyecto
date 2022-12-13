@@ -93,6 +93,7 @@ void Kmeans::run(vector<Point> &all_points) {
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(&&: done) num_threads(nthreads)
     for(Point &point : all_points){
+      cout << "0" << endl;
       int nearestClusterID = getNearestClusterID(point);
       if(point.clusterID == nearestClusterID) continue;
       cout << "1" << endl;
