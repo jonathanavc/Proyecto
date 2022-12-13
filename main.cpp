@@ -39,7 +39,7 @@ void read_dataset(string dir){
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
-                    cout << " ";
+                    cout << " " << endl;
                     resumen[i] += M[i];
                     words_count++;
                 }
