@@ -58,9 +58,11 @@ std::string preprocesado::preprocess_str(std::string text){
     if(!stopwords.count(word)) 
       new_text = new_text + word + " ";
   }while(iss);
+  /*
   stemming::english_stem<> StemEnglish;
   std::wstring w_new_text(new_text.begin(), new_text.end());
   StemEnglish(w_new_text);
   return ws2s(w_new_text);
-  //return new_text;
+  */
+  return new_text;
 }
