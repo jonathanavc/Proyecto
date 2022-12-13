@@ -48,7 +48,7 @@ preprocesado::~preprocesado(){
 
 std::string preprocesado::preprocess_str(std::string text){
   transform(text.begin(), text.end(), text.begin(), [](unsigned char c){ return std::tolower(c); });
-  std::regex e(".|,|:|;|'");
+  std::regex e(".|,|:|;|'|=|*|");
   std::regex_replace(text, e, " ");
   std::string new_text;
   std::istringstream iss(text);
