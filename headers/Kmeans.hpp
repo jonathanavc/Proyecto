@@ -15,7 +15,7 @@ struct Point{
   int pointID, clusterID;
   vector<double> components;
 
-  Point(int id, const vector<double> &coords) 
+  Point(int id, const vector<double> coords) 
     : pointID(id), components(coords) { clusterID = -1; }
 };
 
