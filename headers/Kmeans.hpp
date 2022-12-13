@@ -129,9 +129,14 @@ void Kmeans::run(vector<Point> &all_points) {
     cout<<"Cluster: \n"; //add centroid document
     cout<<cluster.points.size()<<endl;
     for(Point point : cluster.points){
+      for (size_t i = 0; i < 5; i++)
+        cout<< point.components[i] <<" ";
+      cout<<endl;
+      /*
       for(double component : point.components)
         cout<<component<<" ";
       cout<<endl;
+      */
     }
     cout<<endl;
   }
