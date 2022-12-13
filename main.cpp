@@ -52,6 +52,8 @@ void read_dataset(string dir){
 }
 
 int main(int argc, char const *argv[]){
+    srand(time(NULL));
+    
     if(argc != 3){
         cout << "Modo de uso: "<< argv[0]<<" \"Nombre directorio\" \"N°threads\"" <<endl;
         return 1;
