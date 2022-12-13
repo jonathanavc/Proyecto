@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <sstream>
+#include <mutex>
 #include "headers/json.hpp"
 #include "headers/Kmeans.hpp"
 #include "headers/word2vec.hpp"
@@ -15,6 +16,7 @@ int w2v_dim = 0;
 word2vec * w2v;
 bool _cout = 1;
 vector<Point> points;
+mutex mtx;
 
 void read_dataset(string dir){
     preprocesado _pp;
@@ -43,7 +45,9 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen->at(i) /= words_count;
+        mtx.lock();
         points.push_back(Point(_id, *resumen));
+        mtx.unlock();
     }
 }
 
