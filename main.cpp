@@ -19,12 +19,13 @@ vector<Point> vectors;
 int n_clusters = 10, max_iterations = 5;
 
 void read_dataset(string dir){
-    preprocesado _pp;
+    
     ifstream dataset_file(dir);
     stringstream buffer;
     buffer << dataset_file.rdbuf();
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
+        preprocesado _pp;
         int _text_id = atoi(((string)text["id"]).c_str());
         string _text = text["text"];
         _text = _pp.preprocess_str(_text);
