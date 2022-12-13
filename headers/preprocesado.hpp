@@ -48,7 +48,7 @@ preprocesado::~preprocesado(){
 
 std::string preprocesado::preprocess_str(std::string text){
   transform(text.begin(), text.end(), text.begin(), [](unsigned char c){ return std::tolower(c); });
-  std::regex e(".|,|:|;|'|=|!|?|¿|?|_|");
+  std::regex e(".|,|:|;|'|");
   std::regex_replace(text, e, " ");
   std::string new_text;
   std::istringstream iss(text);
@@ -58,11 +58,10 @@ std::string preprocesado::preprocess_str(std::string text){
     if(!stopwords.count(word)) 
       new_text = new_text + word + " ";
   }while(iss);
-  /*
   stemming::english_stem<> StemEnglish;
   std::wstring w_new_text(new_text.begin(), new_text.end());
   StemEnglish(w_new_text);
+  std::wcout << w_new_text << std::endl;
   return ws2s(w_new_text);
-  */
-  return new_text;
+  //return new_text;
 }
