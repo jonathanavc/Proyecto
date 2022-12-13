@@ -32,21 +32,21 @@ void read_dataset(string dir){
         string word;
         float * M;
         //valores en 0
-        vector<double> *resumen = new vector<double>(w2v_dim, 0.0);
+        vector<double> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
             M = w2v->getvec(word);
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
-                    resumen->at(i) += M[i];
+                    resumen[i] += M[i];
                     words_count++;
                 }
             }
         }
-        for (size_t i = 0; i < w2v_dim; i++) resumen->at(i) /= words_count;
+        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         mtx.lock();
-        points.push_back(Point(_id, *resumen));
+        points.push_back(Point(_id, resumen));
         mtx.unlock();
     }
 }
