@@ -28,8 +28,7 @@ void read_dataset(string dir){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
         _text = _pp.preprocess_str(_text);
-        cout << _text;
-        stringstream words("hola adios");
+        stringstream words(_text);
         string word;
         float * M;
         //valores en 0
@@ -43,8 +42,8 @@ void read_dataset(string dir){
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
                     resumen[i] += M[i];
-                    words_count++;
                 }
+                words_count++;
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
