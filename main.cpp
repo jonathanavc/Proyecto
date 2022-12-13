@@ -1,11 +1,9 @@
-@ -1,90 +1,93 @@
 #include <iostream>
 #include <thread>
 #include <dirent.h>
 #include <fstream>
 #include <sstream>
 #include "headers/json.hpp"
-#include "headers/bfr.hpp"
 #include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
