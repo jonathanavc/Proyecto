@@ -27,6 +27,7 @@ void read_dataset(string dir){
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
+        _text = _pp.preprocess_str(_text);
         cout << _text;
         istringstream  words(_text);
         string word;
