@@ -38,6 +38,7 @@ void read_dataset(string dir){
         while (words >> word) {
             word.push_back(0);
             M = w2v->getvec(word);
+            cout << M << endl;
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
