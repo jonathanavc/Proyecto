@@ -45,7 +45,7 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
-        cout << _text << endl;
+        cout << words_count << endl;
         for (size_t i = 0; i < 5; i++)
             cout << resumen[i] <<" ";
         cout<<endl;
