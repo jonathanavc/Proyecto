@@ -96,8 +96,9 @@ void Kmeans::run(vector<Point> &all_points) {
       int nearestClusterID = getNearestClusterID(point);
       if(point.clusterID == nearestClusterID) continue;
 
-      // Cluster antiguo del punto actual se elimina
-      clusters[point.clusterID].points.erase(clusters[point.clusterID].points.begin() + point.pointID);
+      // Se elimina el punto actual de su cluster antiguo
+      clusters[point.clusterID].points.erase(
+          remove(clusters[point.clusterID].points.begin(), clusters[point.clusterID].points.end(), point));
 
       // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
       clusters[nearestClusterID].addPoint(point);
