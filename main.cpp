@@ -27,14 +27,16 @@ void read_dataset(string dir){
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text = text["text"];
+        _text.push_back(0);
         _text = _pp.preprocess_str(_text);
-        std::stringstream words((string)text["text"]);
+        std::stringstream words(_text);
         string word;
         float * M;
         //valores en 0
         vector<double> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
+            word.push_back(0);
             M = w2v->getvec(word);
             //agregar al resumen
             if(M != NULL) {
