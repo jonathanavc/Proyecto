@@ -29,7 +29,7 @@ void read_dataset(string dir){
         string _text(text["text"].get<std::string>());
         _text = _pp.preprocess_str(_text);
         cout << _text;
-        istringstream  words(_text);
+        stringstream words(_text);
         string word;
         float * M;
         //valores en 0
