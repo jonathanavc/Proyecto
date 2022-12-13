@@ -26,7 +26,6 @@ void read_dataset(string dir){
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
-        auto _jtext = text["text"];
         string _text = text["text"];
         //_text = _pp.preprocess_str(_text);
         istringstream  words(_text.substr(0));
@@ -48,6 +47,7 @@ void read_dataset(string dir){
             }
         }
         for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
+        cout << _text.size() << endl;
         cout << words_count << endl;
         for (size_t i = 0; i < 5; i++)
             cout << resumen[i] <<" ";
