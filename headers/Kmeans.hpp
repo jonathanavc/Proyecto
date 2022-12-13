@@ -87,7 +87,7 @@ void Kmeans::run(vector<Point> &all_points) {
   cout << "Running K-Means Clustering.." << endl;
 
   int iter = 1;
-  for(bool done = true; (iter <= iterations) && !done; iter++){
+  for(bool done = false; (iter <= iterations) && !done; iter++){
     cout << "Iter - " << iter << "/" << iterations << endl;
 
     // Add all points to their nearest cluster
