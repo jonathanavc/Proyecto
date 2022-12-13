@@ -29,6 +29,7 @@ void read_dataset(string dir){
         string _text = to_string(text["text"]);
         //_text = _pp.preprocess_str(_text);
         istringstream  words(_text);
+        cout << _text << endl;
         string word;
         float * M;
         //valores en 0
@@ -37,7 +38,6 @@ void read_dataset(string dir){
         while (words >> word) {
             word.push_back(0);
             M = w2v->getvec(word);
-            cout << M << endl;
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
