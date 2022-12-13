@@ -98,7 +98,8 @@ void Kmeans::run(vector<Point> &all_points) {
       cout << "1" << endl;
       // Se elimina el punto actual de su cluster antiguo
       if(point.clusterID != -1) {
-        cout <<"id:" <<point.clusterID <<endl; 
+        cout <<"id:" <<point.clusterID << endl; 
+        cout <<"nc_id:" << nearestClusterID << endl;
         clusters[point.clusterID].points.erase(find_if(clusters[point.clusterID].points.begin(), 
           clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;}));
       }
