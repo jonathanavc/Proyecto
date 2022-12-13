@@ -17,35 +17,33 @@ bool _cout = 1;
 vector<Point> points;
 
 void read_dataset(string dir){
+    preprocesado _pp;
     ifstream dataset_file(dir);
     stringstream buffer;
     buffer << dataset_file.rdbuf();
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
-        preprocesado * _pp = new preprocesado();
         int _id = atoi(((string)text["id"]).c_str());
         string _text = text["text"];
-        _text = _pp->preprocess_str(_text);
+        _text = _pp.preprocess_str(_text);
         std::stringstream words(_text);
         string word;
         float * M;
         //valores en 0
-        //float resumen[w2v_dim]{};
-        vector<double> resumen(w2v_dim, 0.0);
+        vector<double> *resumen = new vector<double>(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
             M = w2v->getvec(word);
             //agregar al resumen
             if(M != NULL) {
                 for (size_t i = 0; i < w2v_dim; i++){
-                    resumen[i] += M[i];
+                    resumen->at(i) += M[i];
                     words_count++;
                 }
             }
         }
-        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
-        
-        points.push_back(Point(_id, resumen));
+        for (size_t i = 0; i < w2v_dim; i++) resumen->at(i) /= words_count;
+        points.push_back(Point(_id, *resumen));
     }
 }
 
