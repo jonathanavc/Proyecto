@@ -35,18 +35,18 @@ void read_dataset(string dir){
         vector<double> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
-            cout << word << endl;
             word.push_back(0);
             M = w2v->getvec(word);
             //agregar al resumen
             if(M != NULL) {
+                cout << word << endl;
                 for (size_t i = 0; i < w2v_dim; i++){
                     resumen[i] += M[i];
                 }
                 words_count++;
             }
         }
-        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
+        //for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         cout << _text.size() << endl;
         cout << words_count << endl;
         for (size_t i = 0; i < 5; i++)
