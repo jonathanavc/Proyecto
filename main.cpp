@@ -26,10 +26,11 @@ void read_dataset(string dir){
     auto json_file = nlohmann::json::parse(buffer);
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
-        string _text = to_string(text["text"]);
+        auto _jtext = text["text"];
+        string _text = text["text"];
         //_text = _pp.preprocess_str(_text);
         istringstream  words(_text.substr(0));
-        cout << _text << endl;
+        //cout << _text << endl;
         string word;
         float * M;
         //valores en 0
