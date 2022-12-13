@@ -29,13 +29,14 @@ void read_dataset(string dir){
         string _text(text["text"].get<std::string>());
         _text = _pp.preprocess_str(_text);
         cout << _text;
-        istringstream words("hola adios");
+        stringstream words("hola adios");
         string word;
         float * M;
         //valores en 0
         vector<double> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
+            cout << word << endl;
             word.push_back(0);
             M = w2v->getvec(word);
             //agregar al resumen
