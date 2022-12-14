@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <mutex>
 #include <sstream>
 #include <float.h>
 #include <numeric>
@@ -36,6 +37,7 @@ struct Cluster{
 class Kmeans{
 private:
   int K, iterations, n_threads;
+  mutex *mutex_clusters;
   vector<Cluster> clusters;
 
   void setInitialPoints(vector<Point> &);
@@ -76,7 +78,9 @@ int Kmeans::getNearestClusterID(Point point) {
 }
 
 Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads) 
-  : K(num_clusters), iterations(max_iterations), n_threads(nthreads){}  
+  : K(num_clusters), iterations(max_iterations), n_threads(nthreads){
+    mutex_clusters = new mutex[n_threads];
+  }  
 
 void Kmeans::run(vector<Point> &all_points) {
   int dimensions = all_points[0].components.size();
@@ -100,10 +104,16 @@ void Kmeans::run(vector<Point> &all_points) {
       // Se elimina el punto actual de su cluster antiguo
       if(point.clusterID != -1) {
         auto it = find_if(clusters[point.clusterID].points.begin(), clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;});
+        mutex_clusters[point.clusterID].lock();
         clusters[point.clusterID].points.erase(it);
+        mutex_clusters[point.clusterID].unlock();
       }
+      
       // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
+      mutex_clusters[nearestClusterID].lock();
       clusters[nearestClusterID].addPoint(point);
+      mutex_clusters[nearestClusterID].unlock();
+
       done = false;
     }
     // Recalculating the center of each cluster
