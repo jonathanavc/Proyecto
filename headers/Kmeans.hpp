@@ -98,17 +98,13 @@ void Kmeans::run(vector<Point> &all_points) {
       if(point.clusterID == nearestClusterID) continue;
       // Se elimina el punto actual de su cluster antiguo
       if(point.clusterID != -1) {
-        cout <<"id:" <<point.clusterID << endl; 
-        cout <<"nc_id:" << nearestClusterID << endl;
         auto it = find_if(clusters[point.clusterID].points.begin(), clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;});
-        cout <<"s"<<endl;
         clusters[point.clusterID].points.erase(it);
       }
       // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
       clusters[nearestClusterID].addPoint(point);
       done = false;
     }
-    cout << "3" << endl;
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
@@ -121,25 +117,13 @@ void Kmeans::run(vector<Point> &all_points) {
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
-    cout << "4" << endl;
   }
-  cout << "Clustering completed in iteration : " << iter << endl << endl;
-
+  cout << "Clustering completed in iteration: " << iter << endl << endl;
   for(Cluster cluster : clusters){
     cout<<"Cluster: \n"; //add centroid document
-    cout<<cluster.points.size()<<endl;
-    for(Point point : cluster.points){
-      for (size_t i = 0; i < 5; i++)
-        cout<< point.components[i] <<" ";
-      cout<<endl;
-      /*
-      for(double component : point.components)
-        cout<<component<<" ";
-      cout<<endl;
-      */
-    }
-    cout<<endl;
+    cout<<"Elementos: " << cluster.points.size()<<endl;
   }
+
 }
 
 void Kmeans::writeResults(string output_dir){
