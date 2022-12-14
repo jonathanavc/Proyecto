@@ -13,10 +13,10 @@ using namespace std;
 
 string word2vec_file = "GoogleNews-vectors-negative300.bin";
 int w2v_dim = 0;
+int n_threads = 0;
 word2vec * w2v;
 bool _cout = 1;
 vector<Point> points;
-mutex mtx;
 
 void read_dataset(string dir){
     preprocesado _pp;
@@ -24,6 +24,7 @@ void read_dataset(string dir){
     stringstream buffer;
     buffer << dataset_file.rdbuf();
     auto json_file = nlohmann::json::parse(buffer);
+    #pragma omp parallel num_threads()
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
@@ -46,9 +47,8 @@ void read_dataset(string dir){
             }
         }
         //for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
-        mtx.lock();
+        #pragma omp atomic
         points.push_back(Point(_id, resumen));
-        mtx.unlock();
     }
 }
 
@@ -58,11 +58,10 @@ int main(int argc, char const *argv[]){
         cout << "Modo de uso: "<< argv[0]<<" \"Nombre directorio\" \"N°threads\"" <<endl;
         return 1;
     }
-    
+
     string path = argv[1];
-    int n_threads = atoi(argv[2]);
+    n_threads = atoi(argv[2]);
     if(n_threads < 0) n_threads = 1;
-    thread threads[n_threads];
     int num_files = 0;
     mytime _mytime;
 
@@ -83,16 +82,9 @@ int main(int argc, char const *argv[]){
         if(_cout)temp_print("Leyendo dataset...");
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
-            if(threads[_cont % n_threads].joinable()){
-                _cont_fin++;
-                threads[_cont % n_threads].join();
-                if(_cout)temp_print("Leyendo dataset... tiempo restante: ", _cont, num_files, &_mytime);
-            }
-            threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
+            read_dataset(path + + f->d_name);
             _cont++;
-        }
-        for (int i = 0; i < n_threads;i++){
-            if(threads[i].joinable()) threads[i].join();
+            if(_cout)temp_print("Leyendo dataset... tiempo restante: ", _cont, num_files, &_mytime);
         }
         closedir(dir);
     }
