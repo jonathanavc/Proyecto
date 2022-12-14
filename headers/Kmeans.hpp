@@ -93,7 +93,7 @@ void Kmeans::run(vector<Point> &all_points) {
     //temp_print("Iter",iter,iterations);
     done = true;
     // Add all points to their nearest cluster
-    #pragma omp parallel for reduction(&&: done) num_threads(nthreads)
+    #pragma omp parallel for reduction(&&: done) num_threads(n_threads)
     for(Point &point : all_points){
       int nearestClusterID = getNearestClusterID(point);
       if(point.clusterID == nearestClusterID) continue;
@@ -113,7 +113,7 @@ void Kmeans::run(vector<Point> &all_points) {
       // Promedio por dimension
       for(int i = 0; i < dimensions; i++){
         double sum = 0.0;
-        #pragma omp parallel for reduction(+: sum) num_threads(nthreads)
+        #pragma omp parallel for reduction(+: sum) num_threads(n_threads)
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
