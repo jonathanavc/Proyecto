@@ -24,7 +24,7 @@ void read_dataset(string dir){
     stringstream buffer;
     buffer << dataset_file.rdbuf();
     auto json_file = nlohmann::json::parse(buffer);
-    #pragma omp parallel num_threads()
+    #pragma omp parallel num_threads(n_threads)
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
