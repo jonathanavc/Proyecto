@@ -54,12 +54,11 @@ void read_dataset(string dir){
 
 int main(int argc, char const *argv[]){
     srand(time(NULL));
-
     if(argc != 3){
         cout << "Modo de uso: "<< argv[0]<<" \"Nombre directorio\" \"N°threads\"" <<endl;
         return 1;
     }
-
+    
     string path = argv[1];
     int n_threads = atoi(argv[2]);
     if(n_threads < 0) n_threads = 1;
