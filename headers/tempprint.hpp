@@ -1,3 +1,6 @@
+#ifndef TEMPPRINT_HPP
+#define TEMPPRINT_HPP
+
 #include <iostream>
 #include <iomanip>
 #include "mytime.hpp"
@@ -22,3 +25,5 @@ void temp_print(std::string _s, int _i1 = -1, int _i2 = -1, mytime * _mytime = N
     std::cout << "\n";
     std::cout << "\e[A";
 }
+
+#endif /* TEMPPRINT_HPP */

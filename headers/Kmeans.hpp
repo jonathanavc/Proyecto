@@ -9,6 +9,7 @@
 #include <sstream>
 #include <float.h>
 #include <numeric>
+#include "tempprint.hpp"
 
 using namespace std;
 
