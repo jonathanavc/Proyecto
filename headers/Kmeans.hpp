@@ -89,7 +89,8 @@ void Kmeans::run(vector<Point> &all_points) {
 
   int iter = 1;
   for(bool done = false; (iter <= iterations) && !done; iter++){
-    cout << "Iter - " << iter << "/" << iterations << endl;
+    //cout << "Iter - " << iter << "/" << iterations << endl;
+    temp_print("Iter",iter,iterations);
     done = true;
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(&&: done) num_threads(nthreads)
