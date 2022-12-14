@@ -35,7 +35,7 @@ struct Cluster{
 
 class Kmeans{
 private:
-  int K, iterations;
+  int K, iterations, n_threads;
   vector<Cluster> clusters;
 
   void setInitialPoints(vector<Point> &);
@@ -76,7 +76,7 @@ int Kmeans::getNearestClusterID(Point point) {
 }
 
 Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads) 
-  : K(num_clusters), iterations(max_iterations){}  
+  : K(num_clusters), iterations(max_iterations), n_threads(nthreads){}  
 
 void Kmeans::run(vector<Point> &all_points) {
   int dimensions = all_points[0].components.size();
