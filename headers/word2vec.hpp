@@ -3,7 +3,6 @@
 #include <map>
 #include "tempprint.hpp"
 
-
 const long long max_w = 50;  
 
 class word2vec{
