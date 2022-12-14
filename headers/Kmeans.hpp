@@ -70,7 +70,7 @@ int Kmeans::getNearestClusterID(Point point) {
     vector<double> tmp(cluster.centroid.components.size());
     transform(cluster.centroid.components.begin(), cluster.centroid.components.end(), 
         point.components.begin(), tmp.begin(),
-        [](auto a, auto b) -> double {return (a+b) * (a+b);});
+        [](auto a, auto b) -> double {return (a-b) * (a-b);});
     dist = sqrt(accumulate(tmp.begin(), tmp.end(), 0));
     if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; }
   }
