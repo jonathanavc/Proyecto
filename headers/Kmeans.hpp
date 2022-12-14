@@ -103,12 +103,12 @@ void Kmeans::run(vector<Point> &all_points) {
       if(point.clusterID == nearestClusterID) continue;
       // Se elimina el punto actual de su cluster antiguo
       if(point.clusterID != -1) {
-        auto it = find_if(clusters[point.clusterID].points.begin(), clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;});
         mutex_clusters[point.clusterID].lock();
+        auto it = find_if(clusters[point.clusterID].points.begin(), clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;});
         clusters[point.clusterID].points.erase(it);
         mutex_clusters[point.clusterID].unlock();
       }
-      
+
       // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
       mutex_clusters[nearestClusterID].lock();
       clusters[nearestClusterID].addPoint(point);
