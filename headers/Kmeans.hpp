@@ -118,7 +118,7 @@ void Kmeans::run(vector<Point> &all_points) {
       }
     }
   }
-  cout << "Clustering completed in iteration: " << iter << endl << endl;
+  cout << "Clustering completed in iteration: " << iter - 1 << endl << endl;
   for(Cluster cluster : clusters){
     cout<<"Cluster: \n"; //add centroid document
     cout<<"Elementos: " << cluster.points.size()<<endl;
