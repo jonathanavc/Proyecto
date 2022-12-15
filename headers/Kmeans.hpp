@@ -94,11 +94,12 @@ void Kmeans::run(vector<Point> &all_points) {
   if(_cout) temp_print("Running K-Means Clustering..");
 
   int iter = 1;
-  for(bool done = false; iter <= iterations; iter++){
+  for(bool done = false; iter <= iterations; iter++, done = true){
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",0,4);
     //temp_print("Iter",iter,iterations);
     done = true;
     int all_points_size = all_points.size();
+
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(&&: done) num_threads(n_threads)
     for(int i = 0; i < all_points_size; i++){
