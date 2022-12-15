@@ -4,10 +4,10 @@
 #include <fstream>
 #include <sstream>
 #include <mutex>
-#include "headers/json.hpp"
-#include "headers/Kmeans.hpp"
-#include "headers/word2vec.hpp"
-#include "headers/preprocesado.hpp"
+#include "utils/json.hpp"
+#include "utils/word2vec.hpp"
+#include "kmeans/kmeans.hpp"
+#include "preprocess/preprocess.hpp"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ word2vec * w2v;
 vector<Point> points;
 
 void read_dataset(string dir){
-    preprocesado _pp;
+    preprocess _pp;
     ifstream dataset_file(dir);
     stringstream buffer;
     buffer << dataset_file.rdbuf();
