@@ -98,8 +98,7 @@ int main(int argc, char const *argv[]){
         }
         closedir(dir);
     }
-    if(_cout)temp_print("Ejecutando KMEANS...");
-    Kmeans kmeans(5, 20, n_threads);
+    Kmeans kmeans(5, 20, n_threads, _cout);
     kmeans.run(points);
     kmeans.writeResults("output");
     return 0;

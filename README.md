@@ -8,4 +8,4 @@ Proyecto Semestral de _TÓPICOS EN MANEJO DE GRANDES VOLÚMENES DE DATOS_
 ## Dependencias 
     https://github.com/nlohmann/json
 ## Compilación
-    g++ main.cpp -pthread -fopenmp
+    g++ main.cpp -pthread -fopenmp -O3
