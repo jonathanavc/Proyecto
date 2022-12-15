@@ -95,7 +95,7 @@ int main(int argc, char const *argv[]){
             if(threads[_cont % n_threads].joinable()){
                 _cont_fin++;
                 threads[_cont % n_threads].join();
-                if(_cout)temp_print("Leyendo dataset... tiempo restante: ", _cont, num_files, &_mytime);
+                if(_cout && _cont % n_threads == n_threads - 1)temp_print("Leyendo dataset... tiempo restante: ", _cont, num_files, &_mytime);
             }
             threads[_cont % n_threads] = thread(&read_dataset, path + + f->d_name);
             _cont++;
