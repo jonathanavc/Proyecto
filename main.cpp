@@ -56,18 +56,23 @@ void read_dataset(string dir){
 
 int main(int argc, char const *argv[]){
     srand(time(NULL));
-    if(argc != 3){
-        cout << "Modo de uso: "<< argv[0]<<" \"Nombre directorio\" \"N°threads\"" <<endl;
+    if(argc != 5){
+        cout << "Modo de uso: "<< argv[0]<<" \"Nombre directorio\"  \"NumClusters\"  \"MaxIter\"  \"N°threads\"" <<endl;
         return 1;
     }
 
     string path = argv[1];
-    int n_threads = atoi(argv[2]);
+    int K = atoi(argv[2]);
+    int MaxIter = atoi(argv[3]);
+    int n_threads = atoi(argv[4]);
+    if(K < 0) K = 1;
+    if(MaxIter < 0) MaxIter = 1;
     if(n_threads < 0) n_threads = 1;
+    
     thread threads[n_threads];
-    int num_files = 0;
+    
     mytime _mytime;
-
+    int num_files = 0;
     if (auto dir = opendir(path.c_str())) {
         while (auto f = readdir(dir)){
             if (!f->d_name || f->d_name[0] == '.') continue;
@@ -76,7 +81,9 @@ int main(int argc, char const *argv[]){
         closedir(dir);
     }
 
+    // Leer archivos en paralelo
     if (auto dir = opendir(path.c_str())) {
+        // Cargar w2v
         w2v = new word2vec(word2vec_file, _cout);
         w2v_dim = w2v->getdim();
         int _cont = 0;
@@ -98,8 +105,12 @@ int main(int argc, char const *argv[]){
         }
         closedir(dir);
     }
-    Kmeans kmeans(5, 20, n_threads, _cout);
+
+    // Ejecutar Kmeans
+    Kmeans kmeans(K, MaxIter, n_threads, _cout);
     kmeans.run(points);
+    // Guardar Resultados de Kmeans
+    if(_cout)temp_print("Guardando resultados en output...");
     kmeans.writeResults("output");
     return 0;
 }

@@ -79,7 +79,7 @@ int Kmeans::getNearestClusterID(Point point) {
   return NearestClusterID;
 }
 
-Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads, bool _cout) 
+Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads, bool _cout = true) 
   : K(num_clusters), iterations(max_iterations), n_threads(nthreads), _cout(_cout){
     mutex_clusters = new mutex[n_threads];
   }  
@@ -92,7 +92,7 @@ void Kmeans::run(vector<Point> &all_points) {
   cout << "Numero de Clusters = " << clusters.size()  << endl;
   cout << "Dimensión de cada punto = " << dimensions << endl;
   cout << "Cantidad de puntos = " << all_points.size() << endl;
-  temp_print("Running K-Means Clustering..");
+  if(_cout) temp_print("Running K-Means Clustering..");
 
   int iter = 1;
   for(bool done = false; (iter <= iterations) && !done; iter++){
@@ -154,18 +154,18 @@ void Kmeans::run(vector<Point> &all_points) {
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
       if(cluster.points.size() <= 0) continue;
-      // Promedio por dimension
-      #pragma omp parallel for num_threads(n_threads)
+      // Promedio por dimension 
+      #pragma omp parallel for num_threads(n_threads) //esto si q si 😎
       for(int i = 0; i < dimensions; i++){
         double sum = 0.0;
-        //#pragma omp parallel for reduction(+: sum) num_threads(n_threads)
+        //#pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",4,4);
   }
-  cout << "Clustering completed in iteration: " << iter - 1 << endl << endl;
+  cout << "Clustering completed in iteration: " << iter - 1 << endl;
   for(Cluster cluster : clusters){
     cout<<"Cluster: "<<cluster.clusterID<<"\n"; //add centroid document
     cout<<"Elementos: " << cluster.points.size()<<endl;
