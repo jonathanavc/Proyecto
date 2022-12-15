@@ -139,8 +139,13 @@ void Kmeans::run(vector<Point> &all_points) {
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",2,4);
 
     // Se agregan los puntos a su nuevo cluster
+    // mejorará esto en paralelo?
+    #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < all_points_size; i++){
-      clusters[all_points[i].clusterID].addPoint(all_points[i]);
+      int clusterID = all_points[i].clusterID;
+      mutex_clusters[clusterID].lock();
+      clusters[clusterID].addPoint(all_points[i]);
+      mutex_clusters[clusterID].unlock();
     }
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",3,4);
 
