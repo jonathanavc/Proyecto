@@ -94,7 +94,7 @@ void Kmeans::run(vector<Point> &all_points) {
   if(_cout) temp_print("Running K-Means Clustering..");
 
   int iter = 1;
-  for(bool done = false; (iter <= iterations) && !done; iter++){
+  for(bool done = false; iter <= iterations; iter++){
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",0,4);
     //temp_print("Iter",iter,iterations);
     done = true;
@@ -108,9 +108,12 @@ void Kmeans::run(vector<Point> &all_points) {
       all_points[i].clusterID = nearestClusterID;
       done = false;
     }
-    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",1,4);
 
-    // se limpian los clusters
+    // Si converge termina el ciclo
+    if(done) break;
+
+    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",1,4);
+    // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
     for(Cluster& cluster : clusters){
       cluster.points.clear();
