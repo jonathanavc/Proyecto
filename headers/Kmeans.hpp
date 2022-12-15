@@ -132,7 +132,7 @@ void Kmeans::run(vector<Point> &all_points) {
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",1,4);
 
     // se limpian los clusters
-    #pragma omp parallel for num_threads(min(n_threads, K))
+    #pragma omp parallel for num_threads(n_threads)
     for(Cluster& cluster : clusters){
       cluster.points.clear();
     }
