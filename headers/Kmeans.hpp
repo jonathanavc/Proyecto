@@ -110,7 +110,7 @@ void Kmeans::run(vector<Point> &all_points) {
       conv++;
     }
     if(conv!= 0) done = false;
-    if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), conv, all_points_size, false);
+    if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), conv, all_points_size, NULL ,false);
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
 
     // Si converge termina el ciclo
