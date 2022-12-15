@@ -99,26 +99,6 @@ void Kmeans::run(vector<Point> &all_points) {
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",0,4);
     //temp_print("Iter",iter,iterations);
     done = true;
-
-    /*
-    // Add all points to their nearest cluster
-    #pragma omp parallel for reduction(&&: done) num_threads(n_threads)
-    for(Point &point : all_points){
-      int nearestClusterID = getNearestClusterID(point);
-      if(point.clusterID == nearestClusterID) continue;
-      // Se elimina el punto actual de su cluster antiguo
-      if(point.clusterID != -1) {
-        mutex_clusters[point.clusterID].lock();
-        auto it = find_if(clusters[point.clusterID].points.begin(), clusters[point.clusterID].points.end(), [point](Point p){return p.pointID == point.pointID;});
-        clusters[point.clusterID].points.erase(it);
-        mutex_clusters[point.clusterID].unlock();
-      }
-      // Se agrega el punto a su cluster mas cercano. Su clusterID se actualiza
-      mutex_clusters[nearestClusterID].lock();
-      clusters[nearestClusterID].addPoint(point);
-      mutex_clusters[nearestClusterID].unlock();
-      done = false;
-    }*/
     int all_points_size = all_points.size();
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(&&: done) num_threads(n_threads)
@@ -149,7 +129,6 @@ void Kmeans::run(vector<Point> &all_points) {
     }
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),3,4);
 
-    // esto es lo que más se demora *************************************************************************************************************
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
@@ -167,8 +146,8 @@ void Kmeans::run(vector<Point> &all_points) {
   }
   cout << "Clustering completed in iteration: " << iter - 1 << endl;
   for(Cluster cluster : clusters){
-    cout<<"Cluster: "<<cluster.clusterID<<"\n"; //add centroid document
-    cout<<"Elementos: " << cluster.points.size()<<endl;
+    cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
+    cout<<"Elementos: " << cluster.points.size() << endl;
   }
 }
 
