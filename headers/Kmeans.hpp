@@ -122,11 +122,10 @@ void Kmeans::run(vector<Point> &all_points) {
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(&&: done) num_threads(n_threads)
     for(int i = 0; i < all_points_size; i++){
-      Point point = all_points[i];
-      int nearestClusterID = getNearestClusterID(point);
+      int nearestClusterID = getNearestClusterID(all_points[i]);
       if(point.clusterID == nearestClusterID) continue;
       // Cambiar cluster_id de Point
-      point.clusterID = nearestClusterID;
+      all_points[i].clusterID = nearestClusterID;
       done = false;
     }
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",1,4);
@@ -140,13 +139,12 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Se agregan los puntos a su nuevo cluster
     // mejorará esto en paralelo?
-    //#pragma omp parallel for num_threads(n_threads)
+    #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < all_points_size; i++){
       int clusterID = all_points[i].clusterID;
-      cout << clusterID << endl;
-      //mutex_clusters[clusterID].lock();
+      mutex_clusters[clusterID].lock();
       clusters[clusterID].addPoint(all_points[i]);
-      //mutex_clusters[clusterID].unlock();
+      mutex_clusters[clusterID].unlock();
     }
     if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",3,4);
 
