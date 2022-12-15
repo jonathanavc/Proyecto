@@ -123,7 +123,7 @@ void Kmeans::run(vector<Point> &all_points) {
     #pragma omp parallel for reduction(&&: done) num_threads(n_threads)
     for(int i = 0; i < all_points_size; i++){
       int nearestClusterID = getNearestClusterID(all_points[i]);
-      if(point.clusterID == nearestClusterID) continue;
+      if(all_points[i].clusterID == nearestClusterID) continue;
       // Cambiar cluster_id de Point
       all_points[i].clusterID = nearestClusterID;
       done = false;
