@@ -89,8 +89,9 @@ void Kmeans::run(vector<Point> &all_points) {
 
   setInitialPoints(all_points);
 
-  cout << "Clusters initialized = " << clusters.size()  << endl;
-  cout << "Points with dimension = " << dimensions << endl;
+  cout << "Numero de Clusters = " << clusters.size()  << endl;
+  cout << "Dimensión de cada punto = " << dimensions << endl;
+  cout << "Cantidad de puntos = " << all_points.size() << endl;
   temp_print("Running K-Means Clustering..");
 
   int iter = 1;
@@ -146,16 +147,18 @@ void Kmeans::run(vector<Point> &all_points) {
       clusters[clusterID].addPoint(all_points[i]);
       mutex_clusters[clusterID].unlock();
     }
-    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",3,4);
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),3,4);
 
+    // esto es lo que más se demora *************************************************************************************************************
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
       if(cluster.points.size() <= 0) continue;
       // Promedio por dimension
+      #pragma omp parallel for num_threads(n_threads)
       for(int i = 0; i < dimensions; i++){
         double sum = 0.0;
-        #pragma omp parallel for reduction(+: sum) num_threads(n_threads)
+        //#pragma omp parallel for reduction(+: sum) num_threads(n_threads)
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
