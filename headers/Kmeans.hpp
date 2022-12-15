@@ -88,14 +88,14 @@ void Kmeans::run(vector<Point> &all_points) {
 
   setInitialPoints(all_points);
 
-  cout << "Numero de Clusters = " << clusters.size()  << endl;
-  cout << "Dimensión de cada punto = " << dimensions << endl;
-  cout << "Cantidad de puntos = " << all_points.size() << endl;
+  if(_cout) cout << "Numero de Clusters = " << clusters.size()  << endl;
+  if(_cout) cout << "Dimensión de cada punto = " << dimensions << endl;
+  if(_cout) cout << "Cantidad de puntos = " << all_points.size() << endl;
   if(_cout) temp_print("Running K-Means Clustering..");
 
   int iter = 1;
   for(bool done = true; iter <= iterations; iter++, done = true){
-    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",0,4);
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 0, 4);
 
     //temp_print("Iter",iter,iterations);
     int all_points_size = all_points.size();
@@ -109,7 +109,7 @@ void Kmeans::run(vector<Point> &all_points) {
       all_points[i].clusterID = nearestClusterID;
       done = false;
     }
-    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",1,4);
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
 
     // Si converge termina el ciclo
     if(done) break;
@@ -119,7 +119,7 @@ void Kmeans::run(vector<Point> &all_points) {
     for(Cluster& cluster : clusters){
       cluster.points.clear();
     }
-    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",2,4);
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 2, 4);
 
     // Se agregan los puntos a su nuevo cluster
     // mejorará esto en paralelo?
@@ -130,7 +130,7 @@ void Kmeans::run(vector<Point> &all_points) {
       clusters[clusterID].addPoint(all_points[i]);
       mutex_clusters[clusterID].unlock();
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),3,4);
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
 
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
@@ -145,12 +145,12 @@ void Kmeans::run(vector<Point> &all_points) {
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
-    if(_cout) temp_print("ITER[" + to_string(iter) +"/"+ to_string(iterations) + "]",4,4);
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 4, 4);
   }
-  cout << "Clustering completed in iteration: " << iter - 1 << endl;
+  if(_cout) cout << "Clustering completed in iteration: " << iter - 1 << endl;
   for(Cluster cluster : clusters){
-    cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
-    cout<<"Elementos: " << cluster.points.size() << endl;
+    if(_cout) cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
+    if(_cout) cout<<"Elementos: " << cluster.points.size() << endl;
   }
 }
 
@@ -165,7 +165,7 @@ void Kmeans::writeResults(string output_dir){
   // Write cluster centers to file
   ofstream outfile;
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
-  if(!outfile.is_open()){ cout<<"Error: Unable to write to clusters.txt"; return; }
+  if(!outfile.is_open()){ if(_cout) cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
     for(double component : cluster.centroid.components)
       outfile<<component<<" ";

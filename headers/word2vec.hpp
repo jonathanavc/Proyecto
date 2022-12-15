@@ -51,6 +51,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
         cont++;
     }
     fclose(f);
+    if(_cout) temp_print("Word2vec cargado en ",-1,-1, &_mytime, false);
 }
 
 word2vec::~word2vec(){

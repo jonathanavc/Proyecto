@@ -104,13 +104,19 @@ int main(int argc, char const *argv[]){
             if(threads[i].joinable()) threads[i].join();
         }
         closedir(dir);
+        if(_cout)temp_print("Dataset procesado en ",-1,-1, &_mytime, false);
     }
-
+    
+    
     // Ejecutar Kmeans
     Kmeans kmeans(K, MaxIter, n_threads, _cout);
+    _mytime.start("");
     kmeans.run(points);
+    if(_cout) temp_print("Kmeans ejecutado en ",-1,-1, &_mytime, false);
     // Guardar Resultados de Kmeans
-    if(_cout)temp_print("Guardando resultados en output...");
+    _mytime.start("");
+    if(_cout) temp_print("Guardando resultados en output...");
     kmeans.writeResults("output");
+    if(_cout) temp_print("Resultados guardados en ",-1,-1, &_mytime, false);
     return 0;
 }
