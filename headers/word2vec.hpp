@@ -73,15 +73,12 @@ std::string word2vec::getnearestword(std::vector<double> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
     double min = std::numeric_limits<double>::max();
     std::string s = "";
-    int mapsize = w2v.size();
-    //#pragma omp parallel for num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
-    for (int i = 0; i < mapsize; i++){
-        std::map<std::string, int>::iterator it = w2v.begin();
-        std::advance(it, i);
+    #pragma omp parallel for num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
+    for (std::map<std::string, int>::iterator it = std::begin(w2v); it != std::end(w2v); it++){
         double dist = 0.0;
         #pragma omp parallel for reduction(+: dist) num_threads(n_threads)
         for (size_t i = 0; i < size; i++){
-            dist += (M[(it)->second +i] - _f[i]) * (M[(it)->second +i] - _f[i]);
+            dist += (M[it->second +i] - _f[i]) * (M[it->second +i] - _f[i]);
         }
         dist = sqrt(dist);
         if(dist < min) {min = dist;s = it->first;}
