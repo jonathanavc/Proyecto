@@ -88,6 +88,8 @@ void Kmeans::run(vector<Point> &all_points) {
 
   setInitialPoints(all_points);
 
+  cout << clusters.size() << endl;
+  
   if(_cout) cout << "Numero de Clusters = " << clusters.size()  << endl;
   if(_cout) cout << "Dimensión de cada punto = " << dimensions << endl;
   if(_cout) cout << "Cantidad de puntos = " << all_points.size() << endl;
