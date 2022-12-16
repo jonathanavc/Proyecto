@@ -121,9 +121,8 @@ void Kmeans::run(vector<Point> &all_points) {
     // Se agregan los puntos a su nuevo cluster
     // mejorará esto en paralelo?
     //#pragma omp parallel for num_threads(n_threads)
-    for (int i = 0; i < all_points_size; i++){
-      int clusterID = all_points[i].clusterID;
-      clusters[clusterID].addPoint(all_points[i]);
+    for (Point & point: all_points){
+      clusters[point.clusterID].addPoint(point);
     }
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
 
@@ -140,9 +139,9 @@ void Kmeans::run(vector<Point> &all_points) {
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
-    if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), all_points_size - conv, all_points_size, NULL ,false);
+    if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), all_points_size - conv, all_points_size, NULL, false);
   }
-  if(_cout) cout << "Clustering completed in iteration: " << iter - 1 << endl;
+  if(_cout) cout << "Clustering completado en la  iteración: " << min(iter, iterations) << endl;
   for(Cluster cluster : clusters){
     if(_cout) cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
     if(_cout) cout<<"Elementos: " << cluster.points.size() << endl;
