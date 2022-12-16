@@ -70,13 +70,13 @@ int Kmeans::getNearestClusterID(Point point) {
   bool error = true;
   float min_dist = std::numeric_limits<float>::max(), dist;
   int NearestClusterID = -1;
-  for(Cluster &cluster : clusters){
+  for(const Cluster &cluster : clusters){
     dist = 0.0;
     error = false;
     for (size_t i = 0; i < cluster.centroid.components.size(); i++){
       dist += (cluster.centroid.components[i] - point.components[i]) * (cluster.centroid.components[i] - point.components[i]);
     }
-    if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; if(NearestClusterID == -1) cout << "xdddddddddddd"<<endl;}
+    if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID;}
   }
   if(error) cout << "q es esoooooooooooooooooooooooo"<<endl;
   return NearestClusterID;
@@ -98,7 +98,6 @@ void Kmeans::run(vector<Point> &all_points) {
   int iter = 1;
   for(int conv = 0; iter <= iterations; iter++, conv = 0){
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 0, 4);
-    //temp_print("Iter",iter,iterations);
     int all_points_size = all_points.size();
 
     // Add all points to their nearest cluster
