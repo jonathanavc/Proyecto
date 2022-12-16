@@ -122,7 +122,7 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Se agregan los puntos a su nuevo cluster
     // mejorará esto en paralelo?
-    //#pragma omp parallel for num_threads(n_threads)
+    // #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < all_points_size; i++){
       int clusterID = all_points[i].clusterID;
       //mutex_clusters[clusterID].lock();
