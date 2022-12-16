@@ -33,16 +33,15 @@ std::string preprocesado::preprocess_str(std::string text){
       [](unsigned char c){ return std::tolower(c); });
   std::regex e(".|\\.|,|:|;|'|\\*|\\+|=|\\?|");
   std::regex_replace(text, e, " ");
-  std::string new_text;
+  std::string new_text = "";
   std::istringstream iss(text);
-  do{
-    std::string word;
-    iss >> word;
+  std::string word;
+  while(iss >> word){
     if(!stopwords.count(word)){
       Porter2Stemmer::trim(word);
       Porter2Stemmer::stem(word);
-      new_text = new_text + word + " ";
+      new_text.append(new_text + word + " ");
     }
-  }while(iss);
+  }
   return new_text;
 }
