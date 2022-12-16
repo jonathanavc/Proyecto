@@ -79,7 +79,7 @@ std::string word2vec::getnearestword(std::vector<double> _f, int n_threads = 1){
         std::map<std::string, int>::iterator it = w2v.begin();
         std::advance(it, i);
         double dist = 0.0;
-        //#pragma omp parallel for reduction(+: dist) num_threads(n_threads)
+        #pragma omp parallel for reduction(+: dist) num_threads(n_threads)
         for (size_t i = 0; i < size; i++){
             dist += (M[(it)->second +i] - _f[i]) * (M[(it)->second +i] - _f[i]);
         }
