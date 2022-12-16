@@ -111,7 +111,7 @@ void Kmeans::run(vector<Point> &all_points) {
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
 
     // Si converge termina el ciclo
-    if(conv != 0) break;
+    if(conv == 0) break;
 
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
