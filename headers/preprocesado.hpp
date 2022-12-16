@@ -38,8 +38,8 @@ std::string preprocesado::preprocess_str(std::string text){
   std::string word;
   while(iss >> word){
     if(!stopwords.count(word)){
-      Porter2Stemmer::trim(word);
-      Porter2Stemmer::stem(word);
+      //Porter2Stemmer::trim(word);
+      //Porter2Stemmer::stem(word);
       new_text.append(new_text + word + " ");
     }
   }

@@ -21,7 +21,7 @@ word2vec * w2v;
 vector<Point> points;
 
 void read_dataset(string dir){
-    //preprocesado _pp;
+    preprocesado _pp;
     ifstream dataset_file(dir);
     stringstream buffer;
     buffer << dataset_file.rdbuf();
@@ -29,9 +29,7 @@ void read_dataset(string dir){
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
-        //cout << _text << endl;
-        //_text = _pp.preprocess_str(_text);
-        //cout << _text << endl;
+        _text = _pp.preprocess_str(_text);
         stringstream words(_text);
         string word;
         float * M;
