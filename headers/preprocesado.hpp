@@ -5,7 +5,7 @@
 #include <regex>
 #include <string>
 #include <unordered_set>
-//#include "porter2_stemmer/porter2_stemmer.cpp"
+#include "porter2_stemmer/porter2_stemmer.cpp"
 
 class preprocesado{
 private:
@@ -38,8 +38,8 @@ std::string preprocesado::preprocess_str(std::string text){
   std::string word;
   while(iss >> word){
     if(!stopwords.count(word)){
-      //Porter2Stemmer::trim(word);
-      //Porter2Stemmer::stem(word);
+      Porter2Stemmer::trim(word);
+      Porter2Stemmer::stem(word);
       new_text.append(word + " ");
     }
   }
