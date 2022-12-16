@@ -4,10 +4,10 @@
 #include <fstream>
 #include <sstream>
 #include <mutex>
-#include "utils/json.hpp"
-#include "utils/word2vec.hpp"
-#include "kmeans/kmeans.cpp"
-#include "preprocess/preprocess.cpp"
+#include "headers/json.hpp"
+#include "headers/word2vec.hpp"
+#include "headers/kmeans.hpp"
+#include "headers/preprocesado.hpp"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ word2vec * w2v;
 vector<Point> points;
 
 void read_dataset(string dir){
-    preprocess _pp;
+    preprocesado _pp;
     ifstream dataset_file(dir);
     stringstream buffer;
     buffer << dataset_file.rdbuf();
@@ -29,7 +29,7 @@ void read_dataset(string dir){
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
-        _text = _pp.preprocess_str(_text);
+        _text = _pp.preprocesado_str(_text);
         stringstream words(_text);
         string word;
         float * M;

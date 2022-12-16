@@ -17,7 +17,7 @@ preprocess::preprocess(){
 preprocess::~preprocess(){
 }
 
-std::string preprocess::preprocess_str(std::string text){
+std::string preprocess::preprocesado_str(std::string text){
   transform(text.begin(), text.end(), text.begin(), 
       [](unsigned char c){ return std::tolower(c); });
   std::regex e(".|\\.|,|:|;|'|\\*|\\+|=|\\?|");
