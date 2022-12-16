@@ -15,9 +15,9 @@ using namespace std;
 
 struct Point{
   int pointID, clusterID;
-  vector<double> components;
+  vector<float> components;
 
-  Point(int id, const vector<double> &coords) 
+  Point(int id, const vector<float> &coords) 
     : pointID(id), components(coords) { clusterID = -1; }
 };
 
@@ -65,13 +65,13 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
 
 // Recorrer centroides para encontrar el cluster mas cercanos a un punto
 int Kmeans::getNearestClusterID(Point point) {
-  double min_dist = DBL_MAX, dist;
+  float min_dist = DBL_MAX, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
-    vector<double> tmp(cluster.centroid.components.size());
+    vector<float> tmp(cluster.centroid.components.size());
     transform(cluster.centroid.components.begin(), cluster.centroid.components.end(), 
         point.components.begin(), tmp.begin(),
-        [](auto a, auto b) -> double {return (a-b) * (a-b);});
+        [](auto a, auto b) -> float {return (a-b) * (a-b);});
     dist = sqrt(accumulate(tmp.begin(), tmp.end(), 0));
     if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; }
   }
@@ -138,7 +138,7 @@ void Kmeans::run(vector<Point> &all_points) {
       // Promedio por dimension 
       #pragma omp parallel for num_threads(n_threads) //esto si q si 😎
       for(int i = 0; i < dimensions; i++){
-        double sum = 0.0;
+        float sum = 0.0;
         //#pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
@@ -166,7 +166,7 @@ void Kmeans::writeResults(string output_dir){
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
   if(!outfile.is_open()){ if(_cout) cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
-    for(double component : cluster.centroid.components)
+    for(float component : cluster.centroid.components)
       outfile<<component<<" ";
     outfile<<endl;
   }
