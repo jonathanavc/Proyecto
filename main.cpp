@@ -46,7 +46,7 @@ void read_dataset(string dir){
                 words_count++;
             }
         }
-        //for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
+        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         mtx.lock();
         points.push_back(Point(_id, resumen));
         mtx.unlock();
