@@ -74,7 +74,7 @@ int Kmeans::getNearestClusterID(Point point) {
     for (size_t i = 0; i < cluster.centroid.components.size(); i++){
       dist += (cluster.centroid.components[i] - point.components[i]) * (cluster.centroid.components[i] - point.components[i]);
     }
-    if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; }
+    if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; if(NearestClusterID == -1) cout << "xdddddddddddd"<<endl;}
   }
   if(NearestClusterID == -1) cout << "q es esoooooooooooooooooooooooo"<<endl;
   return NearestClusterID;
