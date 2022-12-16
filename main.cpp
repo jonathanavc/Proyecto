@@ -32,8 +32,8 @@ void read_dataset(string dir){
         stringstream words(_text);
         string word;
         float * M;
-        //valores en 0
-        vector<float> resumen(w2v_dim, 0.0);
+        valores en 0
+        vector<double> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
             word.push_back(0);
@@ -46,7 +46,7 @@ void read_dataset(string dir){
                 words_count++;
             }
         }
-        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
+        //for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         mtx.lock();
         points.push_back(Point(_id, resumen));
         mtx.unlock();

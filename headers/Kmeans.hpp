@@ -16,9 +16,9 @@ using namespace std;
 
 struct Point{
   int pointID, clusterID;
-  vector<float> components;
+  vector<double> components;
 
-  Point(int id, const vector<float> &coords) 
+  Point(int id, const vector<double> &coords) 
     : pointID(id), components(coords) { clusterID = -1; }
 };
 
@@ -66,13 +66,13 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
 
 // Recorrer centroides para encontrar el cluster mas cercanos a un punto
 int Kmeans::getNearestClusterID(Point point) {
-  float min_dist = FLT_MAX, dist;
+  double min_dist = FLT_MAX, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
-    vector<float> tmp(cluster.centroid.components.size());
+    vector<double> tmp(cluster.centroid.components.size());
     transform(cluster.centroid.components.begin(), cluster.centroid.components.end(), 
         point.components.begin(), tmp.begin(),
-        [](auto a, auto b) -> float {return (a-b) * (a-b);});
+        [](auto a, auto b) -> double {return (a-b) * (a-b);});
     dist = sqrt(accumulate(tmp.begin(), tmp.end(), 0));
     if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; }
   }
@@ -135,7 +135,7 @@ void Kmeans::run(vector<Point> &all_points) {
       // Promedio por dimension 
       #pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
-        float sum = 0.0;
+        double sum = 0.0;
         //#pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
@@ -164,7 +164,7 @@ void Kmeans::writeResults(string output_dir){
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
   if(!outfile.is_open()){ if(_cout) cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
-    for(float component : cluster.centroid.components)
+    for(double component : cluster.centroid.components)
       outfile<<component<<" ";
     outfile<<endl;
   }
