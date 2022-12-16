@@ -66,7 +66,7 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
 
 // Recorrer centroides para encontrar el cluster mas cercanos a un punto
 int Kmeans::getNearestClusterID(Point point) {
-  float min_dist = DBL_MAX, dist;
+  float min_dist = MAXFLOAT, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
     dist = 0.0;
