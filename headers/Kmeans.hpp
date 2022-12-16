@@ -69,6 +69,7 @@ int Kmeans::getNearestClusterID(Point point) {
   float min_dist = DBL_MAX, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
+    cout << "holaaaaaaaaaaa" << endl;
     vector<float> tmp(cluster.centroid.components.size());
     transform(cluster.centroid.components.begin(), cluster.centroid.components.end(), 
         point.components.begin(), tmp.begin(),
@@ -107,7 +108,6 @@ void Kmeans::run(vector<Point> &all_points) {
       all_points[i].clusterID = nearestClusterID;
       conv++;
     }
-    
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
 
     // Si converge termina el ciclo
@@ -118,7 +118,6 @@ void Kmeans::run(vector<Point> &all_points) {
     for(Cluster& cluster : clusters){
       cluster.points.clear();
     }
-    #pragma omp barrier
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 2, 4);
 
     // Se agregan los puntos a su nuevo cluster
