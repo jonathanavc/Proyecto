@@ -6,8 +6,8 @@
 #include <mutex>
 #include "utils/json.hpp"
 #include "utils/word2vec.hpp"
-#include "kmeans/kmeans.hpp"
-#include "preprocess/preprocess.hpp"
+#include "kmeans/kmeans.cpp"
+#include "preprocess/preprocess.cpp"
 
 using namespace std;
 

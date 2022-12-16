@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <regex>
 #include "preprocess.hpp"
-#include "porter2_stemmer/porter2_stemmer.h"
+#include "porter2_stemmer/porter2_stemmer.cpp"
 
 preprocess::preprocess(){
   std::ifstream sw("stopwords.txt");
