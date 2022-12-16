@@ -5,8 +5,8 @@
 #include <sstream>
 #include <mutex>
 #include "headers/json.hpp"
-#include "headers/word2vec.hpp"
 #include "headers/Kmeans.hpp"
+#include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
 using namespace std;
@@ -29,7 +29,7 @@ void read_dataset(string dir){
     for (auto text : json_file){
         int _id = atoi(((string)text["id"]).c_str());
         string _text(text["text"].get<std::string>());
-        _text = _pp.preprocesado_str(_text);
+        _text = _pp.preprocess_str(_text);
         stringstream words(_text);
         string word;
         float * M;

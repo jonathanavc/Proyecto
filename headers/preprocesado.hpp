@@ -13,10 +13,8 @@ private:
 public:
   preprocesado();
   ~preprocesado();
-  std::string preprocesado_str(std::string);
+  std::string preprocess_str(std::string);
 };
-
-
 
 
 preprocesado::preprocesado(){
@@ -30,7 +28,7 @@ preprocesado::preprocesado(){
 preprocesado::~preprocesado(){
 }
 
-std::string preprocesado::preprocesado_str(std::string text){
+std::string preprocesado::preprocess_str(std::string text){
   transform(text.begin(), text.end(), text.begin(), 
       [](unsigned char c){ return std::tolower(c); });
   std::regex e(".|\\.|,|:|;|'|\\*|\\+|=|\\?|");
