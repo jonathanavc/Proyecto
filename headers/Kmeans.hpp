@@ -107,6 +107,7 @@ void Kmeans::run(vector<Point> &all_points) {
       all_points[i].clusterID = nearestClusterID;
       conv++;
     }
+    
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
 
     // Si converge termina el ciclo
@@ -124,6 +125,7 @@ void Kmeans::run(vector<Point> &all_points) {
     // mejorará esto en paralelo?
     // #pragma omp parallel for num_threads(n_threads)
     for (Point &point: all_points){
+      cout << point.clusterID << endl;
       clusters[point.clusterID].addPoint(point);
     }
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
