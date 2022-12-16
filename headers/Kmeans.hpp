@@ -10,14 +10,15 @@
 #include <float.h>
 #include <numeric>
 #include "tempprint.hpp"
+#include "word2vec.hpp"
 
 using namespace std;
 
 struct Point{
   int pointID, clusterID;
-  vector<double> components;
+  vector<float> components;
 
-  Point(int id, const vector<double> &coords) 
+  Point(int id, const vector<float> &coords) 
     : pointID(id), components(coords) { clusterID = -1; }
 };
 
@@ -38,15 +39,15 @@ struct Cluster{
 class Kmeans{
 private:
   bool _cout;
-  int K, iterations, n_threads;
-  mutex *mutex_clusters;
+  word2vec * _w2v;
   vector<Cluster> clusters;
+  int K, iterations, n_threads;
 
   void setInitialPoints(vector<Point> &);
   int getNearestClusterID(Point);
 
 public:
-  Kmeans(int, int, int, bool);
+  Kmeans(int, int, int, word2vec*, bool);
   void run(vector<Point> &); 
   void writeResults(string);
 };
@@ -65,23 +66,21 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
 
 // Recorrer centroides para encontrar el cluster mas cercanos a un punto
 int Kmeans::getNearestClusterID(Point point) {
-  double min_dist = DBL_MAX, dist;
+  float min_dist = FLT_MAX, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
-    vector<double> tmp(cluster.centroid.components.size());
+    vector<float> tmp(cluster.centroid.components.size());
     transform(cluster.centroid.components.begin(), cluster.centroid.components.end(), 
         point.components.begin(), tmp.begin(),
-        [](auto a, auto b) -> double {return (a-b) * (a-b);});
+        [](auto a, auto b) -> float {return (a-b) * (a-b);});
     dist = sqrt(accumulate(tmp.begin(), tmp.end(), 0));
     if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; }
   }
   return NearestClusterID;
 }
 
-Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads, bool _cout = true) 
-  : K(num_clusters), iterations(max_iterations), n_threads(nthreads), _cout(_cout){
-    mutex_clusters = new mutex[n_threads];
-  }  
+Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads, word2vec * w2v, bool _cout = true) 
+  : K(num_clusters), iterations(max_iterations), n_threads(nthreads), _w2v(w2v), _cout(_cout){}
 
 void Kmeans::run(vector<Point> &all_points) {
   int dimensions = all_points[0].components.size();
@@ -125,9 +124,7 @@ void Kmeans::run(vector<Point> &all_points) {
     //#pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < all_points_size; i++){
       int clusterID = all_points[i].clusterID;
-      //mutex_clusters[clusterID].lock();
       clusters[clusterID].addPoint(all_points[i]);
-      //mutex_clusters[clusterID].unlock();
     }
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
 
@@ -136,9 +133,9 @@ void Kmeans::run(vector<Point> &all_points) {
       // ocurre en algun caso ????
       if(cluster.points.size() <= 0) continue;
       // Promedio por dimension 
-      #pragma omp parallel for num_threads(n_threads) //esto si q si 😎
+      #pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
-        double sum = 0.0;
+        float sum = 0.0;
         //#pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
@@ -150,6 +147,7 @@ void Kmeans::run(vector<Point> &all_points) {
   for(Cluster cluster : clusters){
     if(_cout) cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
     if(_cout) cout<<"Elementos: " << cluster.points.size() << endl;
+    if(_cout && _w2v != NULL) cout<<"Temática: " << _w2v->getnearestword(cluster.centroid.components, n_threads) << endl;
   }
 }
 
@@ -166,7 +164,7 @@ void Kmeans::writeResults(string output_dir){
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
   if(!outfile.is_open()){ if(_cout) cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
-    for(double component : cluster.centroid.components)
+    for(float component : cluster.centroid.components)
       outfile<<component<<" ";
     outfile<<endl;
   }

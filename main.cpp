@@ -6,7 +6,6 @@
 #include <mutex>
 #include "headers/json.hpp"
 #include "headers/Kmeans.hpp"
-#include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
 using namespace std;
@@ -34,7 +33,7 @@ void read_dataset(string dir){
         string word;
         float * M;
         //valores en 0
-        vector<double> resumen(w2v_dim, 0.0);
+        vector<float> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
             word.push_back(0);
@@ -47,7 +46,7 @@ void read_dataset(string dir){
                 words_count++;
             }
         }
-        //for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
+        for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= words_count;
         mtx.lock();
         points.push_back(Point(_id, resumen));
         mtx.unlock();
@@ -109,7 +108,7 @@ int main(int argc, char const *argv[]){
     
     
     // Ejecutar Kmeans
-    Kmeans kmeans(K, MaxIter, n_threads, _cout);
+    Kmeans kmeans(K, MaxIter, n_threads, w2v, _cout);
     _mytime.start("");
     kmeans.run(points);
     if(_cout) temp_print("Kmeans ejecutado en ",-1,-1, &_mytime, false);
