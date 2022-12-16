@@ -76,6 +76,7 @@ int Kmeans::getNearestClusterID(Point point) {
     }
     if(dist < min_dist){ min_dist = dist; NearestClusterID = cluster.clusterID; }
   }
+  if(NearestClusterID == -1) cout << "q es esoooooooooooooooooooooooo"<<endl;
   return NearestClusterID;
 }
 
@@ -102,7 +103,6 @@ void Kmeans::run(vector<Point> &all_points) {
     #pragma omp parallel for reduction(+: conv) num_threads(n_threads)
     for(Point & point: all_points){
       int nearestClusterID = getNearestClusterID(point);
-      if(nearestClusterID == -1) cout << "q es esoooooooooooooooooooooooo"<<endl;
       if(point.clusterID == nearestClusterID) continue;
       // Cambiar cluster_id de Point
       point.clusterID = nearestClusterID;
