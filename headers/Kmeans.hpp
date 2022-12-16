@@ -69,7 +69,6 @@ int Kmeans::getNearestClusterID(Point point) {
   float min_dist = DBL_MAX, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
-    cout << "holaaaaaaaaaaa" << endl;
     vector<float> tmp(cluster.centroid.components.size());
     transform(cluster.centroid.components.begin(), cluster.centroid.components.end(), 
         point.components.begin(), tmp.begin(),
