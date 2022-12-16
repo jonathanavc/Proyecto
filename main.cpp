@@ -6,7 +6,7 @@
 #include <mutex>
 #include "headers/json.hpp"
 #include "headers/word2vec.hpp"
-#include "headers/kmeans.hpp"
+#include "headers/Kmeans.hpp"
 #include "headers/preprocesado.hpp"
 
 using namespace std;
