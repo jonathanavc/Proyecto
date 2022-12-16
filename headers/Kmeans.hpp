@@ -86,8 +86,6 @@ void Kmeans::run(vector<Point> &all_points) {
 
   setInitialPoints(all_points);
 
-  cout << clusters.size() << endl;
-  
   if(_cout) cout << "Numero de Clusters = " << clusters.size()  << endl;
   if(_cout) cout << "Dimensión de cada punto = " << dimensions << endl;
   if(_cout) cout << "Cantidad de puntos = " << all_points.size() << endl;
@@ -103,6 +101,7 @@ void Kmeans::run(vector<Point> &all_points) {
     #pragma omp parallel for reduction(+: conv) num_threads(n_threads)
     for(int i = 0; i < all_points_size; i++){
       int nearestClusterID = getNearestClusterID(all_points[i]);
+      if(nearestClusterID == -1) cout << "q es esoooooooooooooooooooooooo"<<endl;
       if(all_points[i].clusterID == nearestClusterID) continue;
       // Cambiar cluster_id de Point
       all_points[i].clusterID = nearestClusterID;
