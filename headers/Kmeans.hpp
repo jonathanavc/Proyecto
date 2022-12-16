@@ -10,6 +10,7 @@
 #include <float.h>
 #include <numeric>
 #include "tempprint.hpp"
+#include "word2vec.hpp"
 
 using namespace std;
 
@@ -39,14 +40,14 @@ class Kmeans{
 private:
   bool _cout;
   int K, iterations, n_threads;
-  mutex *mutex_clusters;
   vector<Cluster> clusters;
+  word2vec * _w2v;
 
   void setInitialPoints(vector<Point> &);
   int getNearestClusterID(Point);
 
 public:
-  Kmeans(int, int, int, bool);
+  Kmeans(int, int, int, word2vec*, bool);
   void run(vector<Point> &); 
   void writeResults(string);
 };
@@ -78,10 +79,8 @@ int Kmeans::getNearestClusterID(Point point) {
   return NearestClusterID;
 }
 
-Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads, bool _cout = true) 
-  : K(num_clusters), iterations(max_iterations), n_threads(nthreads), _cout(_cout){
-    mutex_clusters = new mutex[n_threads];
-  }  
+Kmeans::Kmeans(int num_clusters, int max_iterations, int nthreads, word2vec * w2v = NULL, bool _cout = true) 
+  : K(num_clusters), iterations(max_iterations), n_threads(nthreads), _cout(_cout), _w2v(w2v){}  
 
 void Kmeans::run(vector<Point> &all_points) {
   int dimensions = all_points[0].components.size();
@@ -125,9 +124,7 @@ void Kmeans::run(vector<Point> &all_points) {
     // #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < all_points_size; i++){
       int clusterID = all_points[i].clusterID;
-      //mutex_clusters[clusterID].lock();
       clusters[clusterID].addPoint(all_points[i]);
-      //mutex_clusters[clusterID].unlock();
     }
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
 
@@ -150,6 +147,7 @@ void Kmeans::run(vector<Point> &all_points) {
   for(Cluster cluster : clusters){
     if(_cout) cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
     if(_cout) cout<<"Elementos: " << cluster.points.size() << endl;
+    if(_cout && _w2v != NULL) cout<<"Temática: " << _w2v->getnearestword(cluster.centroid.components, n_threads) << endl;
   }
 }
 

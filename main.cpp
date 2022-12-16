@@ -6,7 +6,6 @@
 #include <mutex>
 #include "headers/json.hpp"
 #include "headers/Kmeans.hpp"
-#include "headers/word2vec.hpp"
 #include "headers/preprocesado.hpp"
 
 using namespace std;
@@ -109,7 +108,7 @@ int main(int argc, char const *argv[]){
     
     
     // Ejecutar Kmeans
-    Kmeans kmeans(K, MaxIter, n_threads, _cout);
+    Kmeans kmeans(K, MaxIter, n_threads, w2v,_cout);
     _mytime.start("");
     kmeans.run(points);
     if(_cout) temp_print("Kmeans ejecutado en ",-1,-1, &_mytime, false);
