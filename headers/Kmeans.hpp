@@ -9,6 +9,7 @@
 #include <sstream>
 #include <float.h>
 #include <numeric>
+#include <limits>
 #include "tempprint.hpp"
 #include "word2vec.hpp"
 
@@ -66,7 +67,7 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
 
 // Recorrer centroides para encontrar el cluster mas cercanos a un punto
 int Kmeans::getNearestClusterID(Point point) {
-  float min_dist = MAXFLOAT, dist;
+  float min_dist = std::numeric_limits<float>::min(), dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
     dist = 0.0;

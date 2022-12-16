@@ -2,6 +2,7 @@
 #include <omp.h>
 #include <vector>
 #include <map>
+#include <limits>
 #include "tempprint.hpp"
 
 const long long max_w = 50;  
@@ -72,7 +73,7 @@ long long word2vec::getdim(){
 
 std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
-    float min = MAXFLOAT;
+    float min = std::numeric_limits<float>::min();
     std::string s = "";
     //#pragma omp parallel for reduction(min: min) num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
     for (std::map<std::string, int>::iterator it = w2v.begin(); it != w2v.end(); it++){
