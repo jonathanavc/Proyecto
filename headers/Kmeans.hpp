@@ -145,7 +145,7 @@ void Kmeans::run(vector<Point> &all_points) {
   for(Cluster cluster : clusters){
     if(_cout) cout<<"Cluster: "<<cluster.clusterID << endl;; //add centroid document
     if(_cout) cout<<"Elementos: " << cluster.points.size() << endl;
-    //if(_cout && _w2v != NULL) cout<<"Temática: " << _w2v->getnearestword(cluster.centroid.components, n_threads) << endl;
+    if(_cout && _w2v != NULL) cout<<"Temática: " << _w2v->getnearestword(cluster.centroid.components, n_threads) << endl;
   }
 }
 
