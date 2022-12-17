@@ -5,7 +5,6 @@
 
 const long long max_w = 50;
 
-
 class word2vec{
 private:
     std::map<std::string, int> w2v;
@@ -61,6 +60,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
             if(w2v.find(word)!=w2v.end()) topics.insert({word, w2v.find(word)->second});
         }
     }
+    if(_cout) temp_print( to_string(topics.size()) ,-1,-1, NULL, false);
     if(_cout) temp_print("Word2vec cargado en ",-1,-1, &_mytime, false);
 }
 
@@ -82,7 +82,6 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
     float min = FLT_MAX;
     std::string s = "N/A";
-
     for (std::map<std::string, int>::iterator it = topics.begin(); it != topics.end(); it++){
         float dist = 0.0;
         #pragma omp parallel for reduction(+: dist) num_threads(n_threads)
