@@ -60,7 +60,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
             if(w2v.find(word)!=w2v.end()) topics.insert({word, w2v.find(word)->second});
         }
     }
-    if(_cout) temp_print( to_string(topics.size()) ,-1,-1, NULL, false);
+    if(_cout) temp_print( std::to_string(topics.size()) ,-1,-1, NULL, false);
     if(_cout) temp_print("Word2vec cargado en ",-1,-1, &_mytime, false);
 }
 
