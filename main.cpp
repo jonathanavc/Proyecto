@@ -13,7 +13,7 @@ using namespace std;
 
 mutex mtx;
 const string word2vec_file = "GoogleNews-vectors-negative300.bin";
-bool _cout = 0;
+bool _cout = 1;
 int w2v_dim = 0;
 
 word2vec * w2v;
@@ -47,7 +47,6 @@ void read_dataset(string dir){
             }
         }
         if(words_count > 0)for (size_t i = 0; i < w2v_dim; i++) resumen[i] /= (float)words_count; //explota todo xq?
-        cout << w2v->getnearestword(resumen) << endl;
         mtx.lock();
         points.push_back(Point(_id, resumen));
         mtx.unlock();
