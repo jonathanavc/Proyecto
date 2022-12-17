@@ -86,19 +86,21 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
         dist = sqrt(dist);
         if(dist < min) {min = dist;s = it->first;}
     }*/
-
+    cout << "-------------------"<<endl;
     //funcionará mejor?
     #pragma omp parallel for num_threads(n_threads)
     for (size_t i = 0; i < words; i++){
         float dist;
         for (size_t j = 0; j < size; i++){
-            dist = (M[i * size + j] - _f[i]) * (M[i * size + j] - _f[i]);
+            dist += (M[i * size + j] - _f[i]) * (M[i * size + j] - _f[i]);
         }
+        dist = sqrt(dist);
         #pragma omp critical
         {
         if(dist < min) {min = dist;pos_min = i;}
         }
     }
+    cout << "-------------------"<<endl;
     for (std::map<std::string, int>::iterator it = w2v.begin(); it != w2v.end(); it++){
         if(it->second == pos_min){
             s = it->first;
