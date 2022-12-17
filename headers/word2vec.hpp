@@ -75,7 +75,6 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
     float min = FLT_MAX;
     int pos_min = -1;
-    std::string s = "";
     /* mal rendimiento
     //#pragma omp parallel for num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
     for (std::map<std::string, int>::iterator it = w2v.begin(); it != w2v.end(); it++){
@@ -102,12 +101,5 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
         if(dist < min) {min = dist;pos_min = i;}
         }
     }
-    std::cout << "-------------------"<< std::endl;
-    for (std::map<std::string, int>::iterator it = w2v.begin(); it != w2v.end(); it++){
-        if(it->second == pos_min){
-            s = it->first;
-            break;
-        }
-    }
-    return s;
+    return v2w[pos_min]->first;
 }
