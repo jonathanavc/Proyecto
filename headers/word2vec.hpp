@@ -49,7 +49,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
         c[a] = 0;
         for (a = 0; a < size; a++) fread(&M[size * cont + a], sizeof(float), 1, f);
         std::transform(sword.begin(), sword.end(), sword.begin(), [](unsigned char c){ return std::tolower(c); });
-        auto it = w2v.insert({c, cont});
+        auto it = w2v.insert({sword, cont});
         cont++;
     }
     fclose(f);
@@ -57,6 +57,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
     if (file_topics.is_open()){
         std::string word;
         while (file_topics >> word){
+            std::transform(word.begin(), word.end(), word.begin(), [](unsigned char c){ return std::tolower(c); });
             if(w2v.find(word)!=w2v.end()) topics.insert({word, w2v.find(word)->second});
         }
     }
