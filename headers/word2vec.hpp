@@ -81,7 +81,7 @@ long long word2vec::getdim(){
 std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
     float min = FLT_MAX;
-    std::string s;
+    std::string s = "N/A";
 
     for (std::map<std::string, int>::iterator it = topics.begin(); it != topics.end(); it++){
         float dist = 0.0;
