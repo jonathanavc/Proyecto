@@ -72,7 +72,7 @@ long long word2vec::getdim(){
 std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
     float min = FLT_MAX;
-    string s;
+    std::string s;
 
     //mal rendimiento
     //#pragma omp parallel for num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
