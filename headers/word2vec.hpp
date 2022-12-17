@@ -93,7 +93,7 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     for (size_t i = 0; i < words; i++){
         float dist;
         for (size_t j = 0; j < size; i++){
-            dist += (M[i * size + j] - _f[i]) * (M[i * size + j] - _f[i]);
+            dist += (M[i * size + j] - _f[j]) * (M[i * size + j] - _f[j]);
         }
         dist = sqrt(dist);
         #pragma omp critical
