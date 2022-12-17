@@ -55,8 +55,10 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
     fclose(f);
     std::ifstream file_topics("topics");
     if (file_topics.is_open()){
+        if(_cout) temp_print( "hola" ,-1,-1, NULL, false);
         std::string word;
         while (file_topics >> word){
+            if(_cout) temp_print( "hola2" ,-1,-1, NULL, false);
             if(w2v.find(word)!=w2v.end()) topics.insert({word, w2v.find(word)->second});
         }
     }
