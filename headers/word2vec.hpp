@@ -38,19 +38,18 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
     if(_cout) temp_print("cargando word2vec...");
     for (b = 0; b < words; b++) {
         if(_cout && cont%10000 == 0)temp_print("Cargando w2v... tiempo restante:",cont, words, &_mytime);
-        std::string sword;
+        //std::string sword;
         a = 0;
         while (1) {
-            c[a] = fgetc(f);
-            sword.push_back(c[a]);
+            c[a] = std::tolower(fgetc(f));
+            //sword.push_back(c[a]);
             if (feof(f) || (c[a] == ' ')) break;
             if ((a < max_w) && (c[a] != '\n')) a++;
         }
         c[a] = 0;
-        sword.push_back(c[a]);
         for (a = 0; a < size; a++) fread(&M[size * cont + a], sizeof(float), 1, f);
-        std::transform(sword.begin(), sword.end(), sword.begin(), [](unsigned char c){ return std::tolower(c); });
-        auto it = w2v.insert({sword, cont});
+        //std::transform(sword.begin(), sword.end(), sword.begin(), [](unsigned char c){ return std::tolower(c); });
+        auto it = w2v.insert({c, cont});
         cont++;
     }
     fclose(f);
