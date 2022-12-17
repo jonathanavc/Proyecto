@@ -162,6 +162,7 @@ void Kmeans::writeResults(string output_dir){
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
   if(!outfile.is_open()){ if(_cout) cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
+    outfile<<"[ID:"<<cluster.clusterID<<"]"<<"["<<_w2v->getnearestword(cluster.centroid.components, n_threads)<<"]";
     for(float component : cluster.centroid.components)
       outfile<<component<<" ";
     outfile<<endl;
