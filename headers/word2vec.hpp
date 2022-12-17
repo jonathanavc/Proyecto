@@ -3,11 +3,13 @@
 #include <map>
 #include "tempprint.hpp"
 
-const long long max_w = 50;  
+const long long max_w = 50;
+
 
 class word2vec{
 private:
     std::map<std::string, int> w2v;
+    std::map<std::string, int> topics;
     long long words, size;
     float * M;
     bool _cout;
@@ -52,6 +54,13 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
         cont++;
     }
     fclose(f);
+    std::ifstream file_topics("topics");
+    if (file_topics.is_open()){
+        std::string word;
+        while (file_topics >> word){
+            if(w2v.find(word)!=w2v.end()) topics.insert({word, w2v.find(word)->second});
+        }
+    }
     if(_cout) temp_print("Word2vec cargado en ",-1,-1, &_mytime, false);
 }
 
@@ -74,9 +83,7 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     float min = FLT_MAX;
     std::string s;
 
-    //mal rendimiento
-    //#pragma omp parallel for num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
-    for (std::map<std::string, int>::iterator it = w2v.begin(); it != w2v.end(); it++){
+    for (std::map<std::string, int>::iterator it = topics.begin(); it != topics.end(); it++){
         float dist = 0.0;
         #pragma omp parallel for reduction(+: dist) num_threads(n_threads)
         for (size_t i = 0; i < size; i++){
@@ -87,21 +94,5 @@ std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
         dist = sqrt(dist);
         if(dist < min) {min = dist; s = it->first;}
     }
-    //std::cout << "-------------------"<< std::endl;
-    //funcionará mejor? NO
-    /*
-    #pragma omp parallel for num_threads(n_threads)
-    for (size_t i = 0; i < words; i++){
-        float dist;
-        for (size_t j = 0; j < size; i++){
-            dist += (M[i * size + j] - _f[j]) * (M[i * size + j] - _f[j]);
-        }
-        dist = sqrt(dist);
-        #pragma omp critical
-        {
-        if(dist < min) {min = dist;pos_min = i;}
-        }
-    }
-    */
     return s;
 }
