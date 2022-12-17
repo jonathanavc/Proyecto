@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <fstream>
 #include "tempprint.hpp"
 
 const long long max_w = 50;
