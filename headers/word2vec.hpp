@@ -54,7 +54,7 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
         cont++;
     }
     fclose(f);
-    std::ifstream file_topics("topics");
+    std::ifstream file_topics("headers/topics");
     if (file_topics.is_open()){
         if(_cout) temp_print( "hola" ,-1,-1, NULL, false);
         std::string word;
