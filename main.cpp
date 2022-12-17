@@ -33,7 +33,7 @@ void read_dataset(string dir){
         string word;
         float * M;
         //valores en 0
-        vector<double> resumen(w2v_dim, 0.0);
+        vector<float> resumen(w2v_dim, 0.0);
         int words_count = 0;
         while (words >> word) {
             word.push_back(0);

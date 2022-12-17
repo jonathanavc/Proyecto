@@ -16,7 +16,7 @@ public:
     ~word2vec();
     float * getvec(std::string word);
     long long getdim();
-    std::string getnearestword(std::vector<double> _f, int n_threads);
+    std::string getnearestword(std::vector<float> _f, int n_threads);
 };
 
 word2vec::word2vec(std::string file_name, bool __cout = 1){
@@ -69,16 +69,17 @@ long long word2vec::getdim(){
     return size;
 }
 
-std::string word2vec::getnearestword(std::vector<double> _f, int n_threads = 1){
+std::string word2vec::getnearestword(std::vector<float> _f, int n_threads = 1){
     if(_f.size()!= size) return "######";
-    double min = std::numeric_limits<double>::max();
+    float min = FLT_MAX;
     std::string s = "";
     //#pragma omp parallel for num_threads(n_threads) //no funcionaaaaaaaaaaaaaaaaaaaaaa
     for (std::map<std::string, int>::iterator it = std::begin(w2v); it != std::end(w2v); it++){
-        double dist = 0.0;
+        float dist = 0.0;
         #pragma omp parallel for reduction(+: dist) num_threads(n_threads)
         for (size_t i = 0; i < size; i++){
-            dist += (M[it->second +i] - _f[i]) * (M[it->second +i] - _f[i]);
+            float res = (M[it->second +i] - _f[i]) * (M[it->second +i] - _f[i]);
+            dist += res;
         }
         dist = sqrt(dist);
         if(dist < min) {min = dist;s = it->first;}

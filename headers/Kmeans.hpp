@@ -16,9 +16,9 @@ using namespace std;
 
 struct Point{
   int pointID, clusterID;
-  vector<double> components;
+  vector<float> components;
 
-  Point(int id, const vector<double> &coords) 
+  Point(int id, const vector<float> &coords) 
     : pointID(id), components(coords) { clusterID = -1; }
 };
 
@@ -66,7 +66,7 @@ void Kmeans::setInitialPoints(vector<Point> &all_points){
 
 // Recorrer centroides para encontrar el cluster mas cercanos a un punto
 int Kmeans::getNearestClusterID(Point point) {
-  double min_dist = FLT_MAX, dist;
+  float min_dist = FLT_MAX, dist;
   int NearestClusterID = -1;
   for(Cluster &cluster : clusters){
     dist = 0.0;
@@ -133,7 +133,7 @@ void Kmeans::run(vector<Point> &all_points) {
       // Promedio por dimension 
       #pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
-        double sum = 0.0;
+        float sum = 0.0;
         //#pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
@@ -162,7 +162,7 @@ void Kmeans::writeResults(string output_dir){
   outfile.open(output_dir + "/" + to_string(K) + "-clusters.txt");
   if(!outfile.is_open()){ if(_cout) cout<<"Error: Unable to write to clusters.txt"; return; }
   for(Cluster cluster : clusters){
-    for(double component : cluster.centroid.components)
+    for(float component : cluster.centroid.components)
       outfile<<component<<" ";
     outfile<<endl;
   }
