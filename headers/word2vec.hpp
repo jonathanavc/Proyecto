@@ -7,7 +7,8 @@ const long long max_w = 50;
 
 class word2vec{
 private:
-    std::map<std::string, int > w2v;
+    std::map<std::string, int> w2v;
+    std::map<int, std::map<std::string, int>::iterator> v2w;
     long long words, size;
     float * M;
     bool _cout;
@@ -48,7 +49,8 @@ word2vec::word2vec(std::string file_name, bool __cout = 1){
         c[a] = 0;
         for (a = 0; a < size; a++) fread(&M[size * cont + a], sizeof(float), 1, f);
         std::transform(sword.begin(), sword.end(), sword.begin(), [](unsigned char c){ return std::tolower(c); });
-        w2v.insert({c, cont});
+        auto it = w2v.insert({c, cont});
+        v2w.insert({cont,it.first});
         cont++;
     }
     fclose(f);
