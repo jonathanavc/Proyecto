@@ -42,10 +42,13 @@ public:
   }
 
   void merge(LinkedList &lp){
-    if(end != NULL) end->Next = lp.begin;
-    else{
+    if(end != NULL){
       end->Next = lp.begin;
       if(lp.end != NULL) end = lp.end;
+    }
+    else{
+      begin = lp.begin;
+      end = lp.end;
     }
     size += lp.size;
   }
