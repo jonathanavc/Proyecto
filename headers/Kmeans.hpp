@@ -95,7 +95,6 @@ void Kmeans::run(vector<Point> &all_points) {
   int conv_ant = 0;
 
   for(int conv = 0; iter <= iterations; iter++, conv = 0){
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 0, 4);
     //temp_print("Iter",iter,iterations);
     int all_points_size = all_points.size();
 
