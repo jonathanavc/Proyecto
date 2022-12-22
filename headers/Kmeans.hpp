@@ -158,6 +158,7 @@ void Kmeans::run(vector<Point> &all_points) {
     for (int i = 0; i < n_threads; i++){
       for (int j = 0; j < K; j++){
         clusters[j].points.merge(clusterThread[i][j]);
+        clusterThread[i][j].clear();
       }
     }
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),2,4);
