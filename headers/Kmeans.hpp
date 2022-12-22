@@ -147,9 +147,10 @@ void Kmeans::run(vector<Point> &all_points) {
     // Si converge termina el ciclo
     if(conv == 0) break;
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
+
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
-    for(Cluster cluster : clusters){
+    for(Cluster &cluster : clusters){
       cluster.points.clear();
     }
 
@@ -158,7 +159,7 @@ void Kmeans::run(vector<Point> &all_points) {
     // Se agregan los puntos a su nuevo cluster
     for (int i = 0; i < n_threads; i++){
       #pragma omp parallel for num_threads(n_threads)
-      for(Cluster cluster : clusters){
+      for(Cluster &cluster : clusters){
         cluster.points.merge(clusterThread[i][cluster.clusterID]);
         clusterThread[i][cluster.clusterID].clear();
       }
