@@ -144,14 +144,13 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Si converge termina el ciclo
     if(conv == 0) break;
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),0,4);
+    
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < K; i++){
       clusters[i].points.clear();
     }
 
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),1,4);
 
     // Se agregan los puntos a su nuevo cluster
     #pragma omp parallel for num_threads(n_threads)
@@ -161,7 +160,6 @@ void Kmeans::run(vector<Point> &all_points) {
         clusterThread[i][j].clear();
       }
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),2,4);
     /*
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
@@ -177,7 +175,6 @@ void Kmeans::run(vector<Point> &all_points) {
       clusters[point.clusterID].addPoint(&point);
     }
     */
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),3,4);
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
@@ -185,18 +182,19 @@ void Kmeans::run(vector<Point> &all_points) {
       // Promedio por dimension 
       #pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
-        cout <<"dim"<< i << endl;
         //if(_cout) temp_print("Dim Iteracion " + to_string(iter) +" de "+ to_string(iterations),i,dimensions);
-        Point * p = cluster.points.begin;
+        Point * point = cluster.points.begin;
         float sum = 0.0;
         //#pragma omp parallel for reduction(+: sum) num_threads(n_threads)
-        while(p != NULL) sum += p->components[i];
+        while(point != NULL){
+          sum += point->components[i];
+          point = point->Next;
+        }
         //for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size);
         
       }
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),4,4);
   }
   if(_cout) cout << "Clustering completado en la  iteración: " << min(iter, iterations) << endl;
   for(Cluster cluster : clusters){
@@ -211,7 +209,10 @@ void Kmeans::writeResults(string output_dir){
   pointsFile.open(output_dir + "/" + to_string(K) + "-points.txt", ios::out);
   for(Cluster cluster : clusters){
     Point * point = cluster.points.begin;
-    while(point != NULL) pointsFile<< point->clusterID << ":" << point->pointID << endl;
+    while(point != NULL){
+      pointsFile<< point->clusterID << ":" << point->pointID << endl;
+      point = point->Next;
+    }
     //for(Point point : cluster.points) pointsFile<<point.clusterID<<":"<<point.pointID<<endl;
   }
   pointsFile.close();
