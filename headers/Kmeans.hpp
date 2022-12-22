@@ -92,6 +92,8 @@ void Kmeans::run(vector<Point> &all_points) {
   if(_cout) temp_print("Running K-Means Clustering..");
 
   int iter = 1;
+  int conv_ant = 0;
+
   for(int conv = 0; iter <= iterations; iter++, conv = 0){
     if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 0, 4);
     //temp_print("Iter",iter,iterations);
@@ -106,7 +108,7 @@ void Kmeans::run(vector<Point> &all_points) {
       all_points[i].clusterID = nearestClusterID;
       conv++;
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
+    if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), all_points_size - conv, all_points_size);
 
     // Si converge termina el ciclo
     if(conv == 0) break;
@@ -116,7 +118,6 @@ void Kmeans::run(vector<Point> &all_points) {
     for(Cluster& cluster : clusters){
       cluster.points.clear();
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 2, 4);
 
     // Se agregan los puntos a su nuevo cluster
     // mejorará esto en paralelo?
@@ -124,22 +125,20 @@ void Kmeans::run(vector<Point> &all_points) {
     for (Point & point: all_points){
       clusters[point.clusterID].addPoint(point);
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
 
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
       if(cluster.points.size() <= 0) continue;
       // Promedio por dimension 
-      #pragma omp parallel for num_threads(n_threads) //esto si q si
+      //#pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
         float sum = 0.0;
-        //#pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
+        #pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
     }
-    if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), all_points_size - conv, all_points_size, NULL, false);
   }
   if(_cout) cout << "Clustering completado en la  iteración: " << min(iter, iterations) << endl;
   for(Cluster cluster : clusters){
