@@ -130,10 +130,10 @@ void Kmeans::run(vector<Point> &all_points) {
       // ocurre en algun caso ????
       if(cluster.points.size() <= 0) continue;
       // Promedio por dimension 
-      //#pragma omp parallel for num_threads(n_threads) //esto si q si
+      #pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
         float sum = 0.0;
-        #pragma omp parallel for reduction(+: sum) num_threads(n_threads) //no funciona tan bien
+        //#pragma omp parallel for reduction(+: sum) num_threads(n_threads)
         for(Point &point : cluster.points) sum += point.components[i];
         cluster.centroid.components[i] = (sum / cluster.points.size());
       }
