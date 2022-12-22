@@ -136,10 +136,10 @@ void Kmeans::run(vector<Point> &all_points) {
     #pragma omp parallel for reduction(+: conv) num_threads(n_threads)
     for(int i = 0; i < all_points_size; i++){
       int nearestClusterID = getNearestClusterID(all_points[i]);
+      clusterThread[omp_get_thread_num()][nearestClusterID].insert(&all_points[i]);
       if(all_points[i].clusterID == nearestClusterID) continue;
       // Cambiar cluster_id de Point
       all_points[i].clusterID = nearestClusterID;
-      clusterThread[omp_get_thread_num()][nearestClusterID].insert(&all_points[i]);
       conv++;
     }
     if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), all_points_size - conv, all_points_size);
