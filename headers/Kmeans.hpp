@@ -22,6 +22,7 @@ struct Point{
     : pointID(id), components(coords) { clusterID = -1; Next = NULL;}
 };
 
+// Esta Linked List quita todo el cuello de botella 🚬🐛
 class LinkedList{
 private:
 public:
@@ -43,8 +44,8 @@ public:
   void merge(LinkedList &lp){
     if(end != NULL) end->Next = lp.begin;
     else{
-      begin = lp.begin;
-      end = lp.end;
+      end->Next = lp.begin;
+      if(lp.end != NULL) end = lp.end;
     }
     size += lp.size;
   }
@@ -144,7 +145,7 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Si converge termina el ciclo
     if(conv == 0) break;
-    
+
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < K; i++){
@@ -160,7 +161,8 @@ void Kmeans::run(vector<Point> &all_points) {
         clusterThread[i][j].clear();
       }
     }
-    /*
+
+    /* Los vectores ralentizan todo 🤬
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
     for(Cluster& cluster : clusters){
@@ -175,6 +177,7 @@ void Kmeans::run(vector<Point> &all_points) {
       clusters[point.clusterID].addPoint(&point);
     }
     */
+
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
