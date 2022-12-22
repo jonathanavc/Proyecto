@@ -131,7 +131,7 @@ void Kmeans::run(vector<Point> &all_points) {
   LinkedList clusterThread[n_threads][K];
 
   for(int conv = 0; iter <= iterations; iter++, conv = 0){
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 0, 4);
+    //if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 0, 4);
     // Add all points to their nearest cluster
     #pragma omp parallel for reduction(+: conv) num_threads(n_threads)
     for(int i = 0; i < all_points_size; i++){
@@ -146,7 +146,7 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Si converge termina el ciclo
     if(conv == 0) break;
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
+    //if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 1, 4);
 
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
@@ -154,7 +154,7 @@ void Kmeans::run(vector<Point> &all_points) {
       cluster.points.clear();
     }
 
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 2, 4);
+    //if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 2, 4);
 
     // Se agregan los puntos a su nuevo cluster
     for (int i = 0; i < n_threads; i++){
@@ -169,7 +169,7 @@ void Kmeans::run(vector<Point> &all_points) {
         clusterThread[i][j].clear();
       }*/
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
+    //if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 3, 4);
     /* Los vectores ralentizan todo 🤬
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
@@ -206,7 +206,7 @@ void Kmeans::run(vector<Point> &all_points) {
         
       }
     }
-    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 4, 4);
+    //if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations), 4, 4);
   }
   if(_cout) cout << "Clustering completado en la  iteración: " << min(iter, iterations) << endl;
   for(Cluster cluster : clusters){
