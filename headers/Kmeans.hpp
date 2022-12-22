@@ -49,7 +49,7 @@ public:
     size += lp.size;
   }
 
-  void clear(){size = 0;begin = NULL; end = NULL;}
+  void clear(){size = 0; begin = NULL; end = NULL;}
 
 };
 
@@ -144,12 +144,14 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Si converge termina el ciclo
     if(conv == 0) break;
-    
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),0,4);
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < K; i++){
       clusters[i].points.clear();
     }
+
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),1,4);
 
     // Se agregan los puntos a su nuevo cluster
     #pragma omp parallel for num_threads(n_threads)
@@ -158,7 +160,7 @@ void Kmeans::run(vector<Point> &all_points) {
         clusters[j].points.merge(clusterThread[i][j]);
       }
     }
-
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),2,4);
     /*
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
@@ -174,7 +176,7 @@ void Kmeans::run(vector<Point> &all_points) {
       clusters[point.clusterID].addPoint(&point);
     }
     */
-
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),3,4);
     // Recalculating the center of each cluster
     for(Cluster &cluster : clusters){
       // ocurre en algun caso ????
@@ -191,6 +193,7 @@ void Kmeans::run(vector<Point> &all_points) {
         
       }
     }
+    if(_cout) temp_print("Iteracion " + to_string(iter) +" de "+ to_string(iterations),4,4);
   }
   if(_cout) cout << "Clustering completado en la  iteración: " << min(iter, iterations) << endl;
   for(Cluster cluster : clusters){
