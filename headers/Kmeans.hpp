@@ -154,8 +154,8 @@ void Kmeans::run(vector<Point> &all_points) {
 
 
     // Se agregan los puntos a su nuevo cluster
-    #pragma omp parallel for num_threads(n_threads)
     for (int i = 0; i < n_threads; i++){
+      #pragma omp parallel for num_threads(n_threads)
       for (int j = 0; j < K; j++){
         clusters[j].points.merge(clusterThread[i][j]);
         clusterThread[i][j].clear();
