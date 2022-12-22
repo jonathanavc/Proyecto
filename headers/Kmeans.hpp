@@ -185,6 +185,7 @@ void Kmeans::run(vector<Point> &all_points) {
       // Promedio por dimension 
       #pragma omp parallel for num_threads(n_threads) //esto si q si
       for(int i = 0; i < dimensions; i++){
+        if(_cout) temp_print("Dim Iteracion " + to_string(iter) +" de "+ to_string(iterations),i,dimensions);
         Point * p = cluster.points.begin;
         float sum = 0.0;
         //#pragma omp parallel for reduction(+: sum) num_threads(n_threads)
