@@ -36,11 +36,11 @@ public:
   }
   void insert(Point * p){
     p->Next = NULL;
-    if(end == NULL){begin = p; end = p;}
-    else{end->Next = p; end = p;}
+    if(end == NULL) begin = p;
+    else end->Next = p;
+    end = p;
     size++;
   }
-
   void merge(LinkedList &lp){
     if(end != NULL){
       end->Next = lp.begin;
@@ -52,9 +52,7 @@ public:
     }
     size += lp.size;
   }
-
   void clear(){size = 0; begin = NULL; end = NULL;}
-
 };
 
 struct Cluster{
@@ -143,7 +141,6 @@ void Kmeans::run(vector<Point> &all_points) {
       clusterThread[omp_get_thread_num()][nearestClusterID].insert(&all_points[i]);
       conv++;
     }
-
     if(_cout) temp_print("Convergencia en Iteracion " + to_string(iter) +" de "+ to_string(iterations), all_points_size - conv, all_points_size);
 
     // Si converge termina el ciclo
@@ -151,8 +148,8 @@ void Kmeans::run(vector<Point> &all_points) {
 
     // Se limpian los clusters
     #pragma omp parallel for num_threads(n_threads)
-    for (int i = 0; i < K; i++){
-      clusters[i].points.clear();
+    for(Cluster cluster : clusters){
+      cluster.points.clear();
     }
 
 
